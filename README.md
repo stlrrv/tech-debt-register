@@ -23,7 +23,7 @@
 - `processScore`: 1-3
 - `delayScore`: 1-3
 - `impactScore`: 1-3
-- `deadlineScore`: 1-4 (Без жёсткого срока=1, Позже=2, В этом спринте=3, Сейчас=4)
+- `deadlineScore`: 1-3 (Без срока = 1, Мягкий = 2, Жесткий = 3)
 - `author`: Кто добавил
 - `registryStatus`: new/candidate/planned/in_progress/done/deferred
 - `createdAt`, `updatedAt`: Даты
