@@ -577,19 +577,23 @@
                   :style="`color:${riskColor(task.riskLevel)};font-weight:600;`"
                   >{{ riskLabel(task.riskLevel) }}</span
                 >
-                · Горит: {{ burnLabel(task.burnHorizon) }} ·
-                {{ task.techCategory }}
+                Горит: {{ burnLabel(task.burnHorizon) }} ·
+                {{ task.techCategory }} <br />
+                Последствие: {{ burnLabel(task.consequence) }} <br />
                 <template v-if="task.needsDecomposition">
-                  · ⚠ Нужна декомпозиция</template
-                >
-                <template v-if="task.needsTechLead">
-                  · 👤 Нужен техлид</template
-                >
+                  Нужна декомпозиция</template
+                ><br />
+                <template v-if="task.needsTechLead"> Нужен техлид</template>
               </template>
               <template v-else>
                 Инициатор: {{ task.initiator }}
+                <template v-if="task.businessGoal"
+                  ><br />
+                  Бизнес-цель: {{ task.businessGoal }}</template
+                ><br />
                 <template v-if="task.externalDependencyNote">
-                  · {{ task.externalDependencyNote }}</template
+                  Внешняя зависимость:
+                  {{ task.externalDependencyNote }}</template
                 >
               </template>
             </p>
