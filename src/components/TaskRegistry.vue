@@ -42,6 +42,43 @@
           {{ editingTaskId ? "Редактировать задачу" : "Добавить задачу" }}
         </h2>
 
+        <h3 class="group-label">Шаблоны быстрого старта</h3>
+        <p class="helper-text" style="margin-bottom: 0.875rem">
+          Выберите готовый сценарий под квадрант и тип задачи. Форма сама
+          заполнит оценки, статус и типовой контекст, а вам останется добавить
+          только смысл самой задачи.
+        </p>
+        <div class="template-grid" style="margin-bottom: 1rem">
+          <button
+            v-for="preset in taskTemplates"
+            :key="preset.key"
+            type="button"
+            class="template-card"
+            :class="{ active: activeTemplateKey === preset.key }"
+            @click="applyTemplate(preset.key)"
+          >
+            <span class="template-type">{{ preset.typeLabel }}</span>
+            <strong class="template-title">{{ preset.label }}</strong>
+            <span class="template-desc">{{ preset.desc }}</span>
+          </button>
+        </div>
+        <div
+          v-if="activeTemplateMeta"
+          class="template-summary"
+          style="margin-bottom: 1.25rem"
+        >
+          <div>
+            <strong>{{ activeTemplateMeta.label }}</strong>
+            <span style="color: #6b7280">
+              — {{ activeTemplateMeta.desc }}
+            </span>
+          </div>
+          <div>
+            Останется заполнить:
+            <strong>{{ remainingRequiredFieldsLabel }}</strong>
+          </div>
+        </div>
+
         <h3 class="group-label">Основная информация</h3>
         <div class="form-grid">
           <div class="field">
@@ -243,15 +280,6 @@
         </h3>
         <div class="form-grid">
           <div class="field">
-            <label class="field-label">Кто добавил</label>
-            <input
-              class="field-input"
-              v-model="form.author"
-              type="text"
-              placeholder="Тимлид или техлид"
-            />
-          </div>
-          <div class="field">
             <label class="field-label">Статус в реестре</label>
             <select class="field-input" v-model="form.registryStatus">
               <option value="new">Новая</option>
@@ -353,30 +381,11 @@
               ></textarea>
             </div>
             <div class="field">
-              <label class="field-label">Инициатор</label>
-              <select class="field-input" v-model="form.initiator">
-                <option value="Руководитель">Руководитель</option>
-                <option value="Продажи">Продажи</option>
-                <option value="Поддержка">Поддержка</option>
-                <option value="Клиент">Клиент</option>
-                <option value="Внутренняя команда">Внутренняя команда</option>
-              </select>
-            </div>
-            <div class="field">
               <label class="field-label">Внешняя зависимость</label>
               <textarea
                 class="field-input"
                 v-model="form.externalDependencyNote"
                 placeholder="Короткий текст или комментарий"
-                rows="3"
-              ></textarea>
-            </div>
-            <div class="field">
-              <label class="field-label">Критерий готовности (DoD)</label>
-              <textarea
-                class="field-input"
-                v-model="form.definitionOfDone"
-                placeholder="Как понять, что задача завершена"
                 rows="3"
               ></textarea>
             </div>
@@ -586,7 +595,6 @@
                 <template v-if="task.needsTechLead"> Нужен техлид</template>
               </template>
               <template v-else>
-                Инициатор: {{ task.initiator }}
                 <template v-if="task.businessGoal"
                   ><br />
                   Бизнес-цель: {{ task.businessGoal }}</template
@@ -608,7 +616,7 @@
               "
             >
               <span style="font-size: 0.75rem; color: #9ca3af"
-                >{{ task.author }} · {{ formatDate(task.createdAt) }}</span
+                >{{ formatDate(task.createdAt) }}</span
               >
               <div style="display: flex; gap: 0.375rem">
                 <button
@@ -668,6 +676,7 @@ const editingTaskId = ref(null);
 const quadrantCollapsed = ref(false);
 const importInput = ref(null);
 const preview = ref(null);
+const activeTemplateKey = ref("");
 
 const defaultForm = () => ({
   type: "business",
@@ -679,7 +688,6 @@ const defaultForm = () => ({
   delayScore: "1",
   impactScore: "1",
   deadlineScore: "1",
-  author: "",
   registryStatus: "new",
   // tech
   consequence: "",
@@ -691,12 +699,165 @@ const defaultForm = () => ({
   // business
   businessGoal: "",
   expectedOutcome: "",
-  initiator: "Руководитель",
   externalDependencyNote: "",
-  definitionOfDone: "",
 });
 
 const form = reactive(defaultForm());
+
+const taskTemplates = [
+  {
+    key: "tech-first",
+    typeLabel: "Тех. задача",
+    label: "Делаем первыми",
+    desc: "Срочный техдолг с высокой ценностью и малыми усилиями",
+    values: {
+      type: "tech",
+      size: "S",
+      processScore: "3",
+      delayScore: "3",
+      impactScore: "2",
+      deadlineScore: "3",
+      registryStatus: "candidate",
+      riskLevel: "critical",
+      burnHorizon: "already",
+      techCategory: "производительность",
+      needsDecomposition: "false",
+      needsTechLead: "false",
+    },
+  },
+  {
+    key: "tech-plan",
+    typeLabel: "Тех. задача",
+    label: "Планируем",
+    desc: "Крупный техдолг: ценность высокая, но нужно декомпозировать",
+    values: {
+      type: "tech",
+      size: "L",
+      processScore: "3",
+      delayScore: "2",
+      impactScore: "2",
+      deadlineScore: "2",
+      registryStatus: "planned",
+      riskLevel: "high",
+      burnHorizon: "1_3m",
+      techCategory: "архитектура",
+      needsDecomposition: "true",
+      needsTechLead: "true",
+    },
+  },
+  {
+    key: "tech-residual",
+    typeLabel: "Тех. задача",
+    label: "По остаточному",
+    desc: "Полезное улучшение, которое можно брать в спокойный слот",
+    values: {
+      type: "tech",
+      size: "S",
+      processScore: "1",
+      delayScore: "1",
+      impactScore: "1",
+      deadlineScore: "1",
+      registryStatus: "new",
+      riskLevel: "low",
+      burnHorizon: "someday",
+      techCategory: "кодовая база",
+      needsDecomposition: "false",
+      needsTechLead: "false",
+    },
+  },
+  {
+    key: "tech-no",
+    typeLabel: "Тех. задача",
+    label: "Пока не делаем",
+    desc: "Слишком тяжёлая задача без достаточной ценности прямо сейчас",
+    values: {
+      type: "tech",
+      size: "XL",
+      processScore: "1",
+      delayScore: "1",
+      impactScore: "1",
+      deadlineScore: "1",
+      registryStatus: "deferred",
+      riskLevel: "low",
+      burnHorizon: "someday",
+      techCategory: "другое",
+      needsDecomposition: "true",
+      needsTechLead: "true",
+    },
+  },
+  {
+    key: "business-first",
+    typeLabel: "Бизнес-задача",
+    label: "Делаем первыми",
+    desc: "Высокая бизнес-ценность, быстрое исполнение, ближайший спринт",
+    values: {
+      type: "business",
+      size: "S",
+      processScore: "3",
+      delayScore: "3",
+      impactScore: "2",
+      deadlineScore: "3",
+      registryStatus: "candidate",
+    },
+  },
+  {
+    key: "business-plan",
+    typeLabel: "Бизнес-задача",
+    label: "Планируем",
+    desc: "Крупная бизнес-задача, важна, но требует отдельного плана",
+    values: {
+      type: "business",
+      size: "L",
+      processScore: "3",
+      delayScore: "2",
+      impactScore: "2",
+      deadlineScore: "2",
+      registryStatus: "planned",
+    },
+  },
+  {
+    key: "business-residual",
+    typeLabel: "Бизнес-задача",
+    label: "По остаточному",
+    desc: "Небольшое улучшение без жёсткого давления по срокам",
+    values: {
+      type: "business",
+      size: "S",
+      processScore: "1",
+      delayScore: "1",
+      impactScore: "1",
+      deadlineScore: "1",
+      registryStatus: "new",
+    },
+  },
+  {
+    key: "business-no",
+    typeLabel: "Бизнес-задача",
+    label: "Пока не делаем",
+    desc: "Большая задача без достаточной ценности или понятного обоснования",
+    values: {
+      type: "business",
+      size: "XL",
+      processScore: "1",
+      delayScore: "1",
+      impactScore: "1",
+      deadlineScore: "1",
+      registryStatus: "deferred",
+    },
+  },
+];
+
+const activeTemplateMeta = computed(() =>
+  taskTemplates.find((preset) => preset.key === activeTemplateKey.value),
+);
+
+const remainingRequiredFieldsLabel = computed(() => {
+  const fields = ["Название", "Описание"];
+  if (form.type === "tech") fields.push("Последствие");
+  if (form.type === "business")
+    fields.push("Бизнес-цель", "Ожидаемый результат");
+  return fields.join(", ");
+});
 
 // ─── quadrant config ──────────────────────────────────────────────────────────
 const quadrantDefs = [
@@ -791,6 +952,30 @@ function updatePreview() {
   };
 }
 
+function applyTemplate(templateKey) {
+  const preset = taskTemplates.find((item) => item.key === templateKey);
+  if (!preset) return;
+
+  const title = form.title;
+  const description = form.description;
+  const consequence = form.consequence;
+  const businessGoal = form.businessGoal;
+  const expectedOutcome = form.expectedOutcome;
+  const externalDependencyNote = form.externalDependencyNote;
+
+  Object.assign(form, defaultForm(), preset.values, {
+    title,
+    description,
+    consequence,
+    businessGoal,
+    expectedOutcome,
+    externalDependencyNote,
+  });
+
+  activeTemplateKey.value = templateKey;
+  updatePreview();
+}
+
 // ─── badges ───────────────────────────────────────────────────────────────────
 function typeBadgeStyle(type) {
   return type === "tech"
@@ -879,7 +1064,6 @@ function formToTask() {
     delayScore: Number(form.delayScore),
     impactScore: Number(form.impactScore),
     deadlineScore: Number(form.deadlineScore),
-    author: form.author,
     registryStatus: form.registryStatus,
   };
   if (form.type === "tech")
@@ -896,9 +1080,7 @@ function formToTask() {
     ...base,
     businessGoal: form.businessGoal,
     expectedOutcome: form.expectedOutcome,
-    initiator: form.initiator,
     externalDependencyNote: form.externalDependencyNote,
-    definitionOfDone: form.definitionOfDone,
   };
 }
 
@@ -930,6 +1112,7 @@ function submitTask() {
 
 function startEdit(task) {
   editingTaskId.value = task.id;
+  activeTemplateKey.value = "";
   Object.assign(form, {
     type: task.type,
     title: task.title,
@@ -940,7 +1123,6 @@ function startEdit(task) {
     delayScore: String(task.delayScore),
     impactScore: String(task.impactScore),
     deadlineScore: String(task.deadlineScore),
-    author: task.author,
     registryStatus: task.registryStatus,
     consequence: task.consequence || "",
     riskLevel: task.riskLevel || "critical",
@@ -950,9 +1132,7 @@ function startEdit(task) {
     needsTechLead: task.needsTechLead ? "true" : "false",
     businessGoal: task.businessGoal || "",
     expectedOutcome: task.expectedOutcome || "",
-    initiator: task.initiator || "Руководитель",
     externalDependencyNote: task.externalDependencyNote || "",
-    definitionOfDone: task.definitionOfDone || "",
   });
   updatePreview();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -964,6 +1144,7 @@ function cancelEdit() {
 }
 function resetForm() {
   Object.assign(form, defaultForm());
+  activeTemplateKey.value = "";
   preview.value = null;
   updatePreview();
 }
@@ -1091,5 +1272,79 @@ onMounted(async () => {
   border-radius: 4px;
   margin-left: 4px;
   vertical-align: middle;
+}
+.helper-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+@media (max-width: 900px) {
+  .template-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid #dbe4f0;
+  background: #f8fafc;
+  color: #111827;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.template-card:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+.template-card.active {
+  border-color: #2563eb;
+  background: #dbeafe;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.template-type {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+}
+.template-title {
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+.template-desc {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+.template-summary {
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 </style>
