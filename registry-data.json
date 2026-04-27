@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-04-27T08:50:04.822Z",
+  "publishedAt": "2026-04-27T09:21:07.757Z",
   "version": "1.0",
   "items": [
     {
@@ -125,6 +125,24 @@
       "needsTechLead": true,
       "createdAt": "2026-04-27T08:48:57.127Z",
       "updatedAt": "2026-04-27T08:49:39.404Z"
+    },
+    {
+      "id": 1777281662215,
+      "type": "business",
+      "title": "Доработать БП на отгрузку",
+      "description": "Иногда менеджерам необходимо отгрузить несколько заказов совместно в один адрес",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 1,
+      "delayScore": 2,
+      "impactScore": 2,
+      "deadlineScore": 3,
+      "registryStatus": "planned",
+      "businessGoal": "Влияение на бизнес минимальное. Больше относится к удобству пользователей ",
+      "expectedOutcome": "Делопроизводитель, склад и логисты получают информацию о совместных ЗК из БП, а не от менеджера напрямую",
+      "externalDependencyNote": "",
+      "createdAt": "2026-04-27T09:21:02.215Z",
+      "updatedAt": "2026-04-27T09:21:02.215Z"
     }
   ]
 }
