@@ -659,7 +659,7 @@
 import { ref, reactive, computed, onMounted } from "vue";
 
 const tasks = ref([]);
-const isReadOnly = ref(false);
+const isReadOnly = ref(true);
 const editingTaskId = ref(null);
 const quadrantCollapsed = ref(false);
 const importInput = ref(null);
