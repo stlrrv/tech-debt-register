@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-04-27T09:21:07.757Z",
+  "publishedAt": "2026-04-27T09:33:11.651Z",
   "version": "1.0",
   "items": [
     {
@@ -143,6 +143,24 @@
       "externalDependencyNote": "",
       "createdAt": "2026-04-27T09:21:02.215Z",
       "updatedAt": "2026-04-27T09:21:02.215Z"
+    },
+    {
+      "id": 1777282382650,
+      "type": "business",
+      "title": "Доработать ПО для поверки тепловизоров",
+      "description": "Исправить найденные пользователями ошибки в ПО",
+      "direction": "web",
+      "size": "S",
+      "processScore": 3,
+      "delayScore": 3,
+      "impactScore": 2,
+      "deadlineScore": 3,
+      "registryStatus": "in_progress",
+      "businessGoal": "Возможность поверять тепловизоры в собственный лаборатории, а не в сторонней, что в последствии экономит деньги",
+      "expectedOutcome": "Метрологи смогут самостоятельно поверять тепловизоры",
+      "externalDependencyNote": "",
+      "createdAt": "2026-04-27T09:33:02.651Z",
+      "updatedAt": "2026-04-27T09:33:02.651Z"
     }
   ]
 }
