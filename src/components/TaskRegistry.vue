@@ -465,14 +465,44 @@
 
       <!-- ── Task List ── -->
       <div class="card">
-        <h2 class="section-title">
-          Список задач
-          <span style="font-size: 0.875rem; font-weight: 400; color: #6b7280"
-            >({{ tasks.length }})</span
-          >
-        </h2>
         <div
-          v-if="tasks.length === 0"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+          "
+        >
+          <h2 class="section-title">
+            Список задач
+            <span style="font-size: 0.875rem; font-weight: 400; color: #6b7280"
+              >({{ sortedTasks.length }})</span
+            >
+          </h2>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
+            <div class="field" style="min-width: 180px">
+              <label class="field-label">Направление</label>
+              <select class="field-input" v-model="directionFilter">
+                <option value="all">Все направления</option>
+                <option value="web">Web</option>
+                <option value="onec">1С</option>
+                <option value="qa">QA</option>
+                <option value="common">Общее</option>
+              </select>
+            </div>
+            <div class="field" style="min-width: 180px">
+              <label class="field-label">Сортировка</label>
+              <select class="field-input" v-model="sortBy">
+                <option value="priority">По приоритету</option>
+                <option value="status">По статусу</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="sortedTasks.length === 0"
           style="padding: 3rem 0; text-align: center; color: #9ca3af"
         >
           Задач пока нет{{
@@ -481,7 +511,7 @@
         </div>
         <div v-else style="display: flex; flex-direction: column; gap: 0.75rem">
           <div
-            v-for="task in tasks"
+            v-for="task in sortedTasks"
             :key="task.id"
             style="
               border: 1.5px solid #e5e7eb;
@@ -677,6 +707,8 @@ const quadrantCollapsed = ref(false);
 const importInput = ref(null);
 const preview = ref(null);
 const activeTemplateKey = ref("");
+const sortBy = ref("priority");
+const directionFilter = ref("all");
 
 const defaultForm = () => ({
   type: "business",
@@ -859,6 +891,47 @@ const remainingRequiredFieldsLabel = computed(() => {
   return fields.join(", ");
 });
 
+const typeOrder = {
+  business: 0,
+  tech: 1,
+};
+
+const statusOrder = {
+  candidate: 0,
+  planned: 1,
+  in_progress: 2,
+  new: 3,
+  deferred: 4,
+  done: 5,
+};
+
+const filteredTasks = computed(() => {
+  if (directionFilter.value === "all") return tasks.value;
+  return tasks.value.filter((task) => task.direction === directionFilter.value);
+});
+
+const sortedTasks = computed(() => {
+  const list = [...filteredTasks.value];
+
+  if (sortBy.value === "status") {
+    return list.sort((a, b) => {
+      const byStatus =
+        (statusOrder[a.registryStatus] ?? 99) -
+        (statusOrder[b.registryStatus] ?? 99);
+      if (byStatus !== 0) return byStatus;
+      return b.createdAt.localeCompare(a.createdAt);
+    });
+  }
+
+  return list.sort((a, b) => {
+    const byValue = calcValue(b) - calcValue(a);
+    if (byValue !== 0) return byValue;
+    const bySize = sizeRank(a.size) - sizeRank(b.size);
+    if (bySize !== 0) return bySize;
+    return b.createdAt.localeCompare(a.createdAt);
+  });
+});
+
 // ─── quadrant config ──────────────────────────────────────────────────────────
 const quadrantDefs = [
   {
@@ -897,13 +970,20 @@ const quadrantDefs = [
 
 const quadrantTasks = computed(() => {
   const map = { first: [], plan: [], residual: [], no: [] };
-  tasks.value.forEach((task) => {
+  filteredTasks.value.forEach((task) => {
     const v = calcValue(task);
     const q = getQuadrant(v, task.size);
     if (q === "Делаем первыми") map.first.push(task);
     else if (q === "Планируем") map.plan.push(task);
     else if (q === "По остаточному") map.residual.push(task);
     else map.no.push(task);
+  });
+  Object.keys(map).forEach((key) => {
+    map[key].sort((a, b) => {
+      const byType = (typeOrder[a.type] ?? 99) - (typeOrder[b.type] ?? 99);
+      if (byType !== 0) return byType;
+      return a.title.localeCompare(b.title, "ru");
+    });
   });
   return map;
 });
@@ -990,6 +1070,9 @@ function sizeBadgeStyle(size) {
     XL: "background:#fce7f3;color:#9d174d;border:1px solid #f9a8d4;",
   };
   return m[size] || "";
+}
+function sizeRank(size) {
+  return { S: 0, M: 1, L: 2, XL: 3 }[size] ?? 99;
 }
 function dirBadgeStyle() {
   return "background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;";
