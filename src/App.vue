@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-import TaskRegistry from './components/TaskRegistry.vue'
+import TaskRegistry from "./components/TaskRegistry.vue";
 </script>
