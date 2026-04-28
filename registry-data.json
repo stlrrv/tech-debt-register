@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-04-27T09:33:11.651Z",
+  "publishedAt": "2026-04-28T14:00:17.445Z",
   "version": "1.0",
   "items": [
     {
@@ -161,6 +161,24 @@
       "externalDependencyNote": "",
       "createdAt": "2026-04-27T09:33:02.651Z",
       "updatedAt": "2026-04-27T09:33:02.651Z"
+    },
+    {
+      "id": 1777384811718,
+      "type": "business",
+      "title": "Выдать права на отчет по автозакупке",
+      "description": "Необходимо выдать права на использование отчета автозакупки Андрею Баракину и Сковородкиной",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 2,
+      "delayScore": 3,
+      "impactScore": 2,
+      "deadlineScore": 3,
+      "registryStatus": "planned",
+      "businessGoal": "Разгрузить директора по коммерческим вопросам, т.к. сейчас только он может формировать этот отчет",
+      "expectedOutcome": "У Баракина и Сковородкиной есть доступ к отчету",
+      "externalDependencyNote": "",
+      "createdAt": "2026-04-28T14:00:11.718Z",
+      "updatedAt": "2026-04-28T14:00:11.718Z"
     }
   ]
 }
