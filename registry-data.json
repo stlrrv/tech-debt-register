@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-05-05T08:29:03.902Z",
+  "publishedAt": "2026-05-05T10:17:18.947Z",
   "version": "1.0",
   "items": [
     {
@@ -15,14 +15,14 @@
       "impactScore": 3,
       "deadlineScore": 3,
       "author": "Техлид",
-      "registryStatus": "planned",
+      "registryStatus": "done",
       "businessGoal": "Сокращение временных трудозатрат бухгалтерии на расчет премии менеджерам ",
       "expectedOutcome": "По товарам из сборных заказов маржинальность распределяется правиьльно ",
       "initiator": "Продажи",
       "externalDependencyNote": "",
       "definitionOfDone": "",
       "createdAt": "2026-04-27T07:24:55.852Z",
-      "updatedAt": "2026-04-27T07:24:55.853Z"
+      "updatedAt": "2026-05-05T10:15:16.300Z"
     },
     {
       "id": 1777274909878,
@@ -36,14 +36,14 @@
       "impactScore": 1,
       "deadlineScore": 3,
       "author": "Техлид",
-      "registryStatus": "in_progress",
+      "registryStatus": "deferred",
       "businessGoal": "Снижение временных трудозатрат бухгалтерии на расчет премии ",
       "expectedOutcome": "Данные отчета соответствуют данным из приложенного эталонного файла по расчету премии за декабрь ",
       "initiator": "Руководитель",
       "externalDependencyNote": "Отчет по премиям для менеджеров",
       "definitionOfDone": "Все цифры из отчета совпадают с цифрами из файла",
       "createdAt": "2026-04-27T07:28:29.878Z",
-      "updatedAt": "2026-04-27T07:28:29.878Z"
+      "updatedAt": "2026-05-05T10:15:33.201Z"
     },
     {
       "id": 1777276338409,
@@ -57,14 +57,14 @@
       "impactScore": 2,
       "deadlineScore": 2,
       "author": "Тимлид",
-      "registryStatus": "new",
+      "registryStatus": "in_progress",
       "businessGoal": "Влияние на бизнес минимальное",
       "expectedOutcome": "При перенаправлении задачи она пропадает из списка задач у перенаправляющего ",
       "initiator": "Клиент",
       "externalDependencyNote": "",
       "definitionOfDone": "",
       "createdAt": "2026-04-27T07:52:18.409Z",
-      "updatedAt": "2026-04-27T07:52:18.409Z"
+      "updatedAt": "2026-05-05T10:16:45.209Z"
     },
     {
       "id": 1777276591510,
@@ -78,14 +78,14 @@
       "impactScore": 2,
       "deadlineScore": 3,
       "author": "Тимлид",
-      "registryStatus": "new",
+      "registryStatus": "in_progress",
       "businessGoal": "Более подробное заполнение документа \"Поручение экспедитору\", что в свою очередь должно ускорить доставку продукции ",
       "expectedOutcome": "\"Поручение экспедитору\" создается из конструктора.\nВсе данные при проведении переносятся в задачу логисту",
       "initiator": "Руководитель",
       "externalDependencyNote": "",
       "definitionOfDone": "",
       "createdAt": "2026-04-27T07:56:31.510Z",
-      "updatedAt": "2026-04-27T07:56:31.510Z"
+      "updatedAt": "2026-05-05T10:16:00.245Z"
     },
     {
       "id": 1777279386325,
@@ -98,12 +98,12 @@
       "delayScore": 2,
       "impactScore": 2,
       "deadlineScore": 3,
-      "registryStatus": "planned",
+      "registryStatus": "in_progress",
       "businessGoal": "Снижение временных трудозатрат инженера сервиса на формирование документов ",
       "expectedOutcome": "\"Акт\" создается из 1С, в документ сервиса и претензии добавлены новые поля ",
       "externalDependencyNote": "",
       "createdAt": "2026-04-27T08:43:06.326Z",
-      "updatedAt": "2026-04-27T08:43:06.326Z"
+      "updatedAt": "2026-05-05T10:16:29.186Z"
     },
     {
       "id": 1777279737127,
@@ -173,12 +173,12 @@
       "delayScore": 3,
       "impactScore": 2,
       "deadlineScore": 3,
-      "registryStatus": "planned",
+      "registryStatus": "done",
       "businessGoal": "Разгрузить директора по коммерческим вопросам, т.к. сейчас только он может формировать этот отчет",
       "expectedOutcome": "У Баракина и Сковородкиной есть доступ к отчету",
       "externalDependencyNote": "",
       "createdAt": "2026-04-28T14:00:11.718Z",
-      "updatedAt": "2026-04-28T14:00:11.718Z"
+      "updatedAt": "2026-05-05T10:15:47.775Z"
     },
     {
       "id": 1777969738007,
@@ -190,13 +190,13 @@
       "processScore": 2,
       "delayScore": 2,
       "impactScore": 3,
-      "deadlineScore": 2,
-      "registryStatus": "planned",
+      "deadlineScore": 3,
+      "registryStatus": "in_progress",
       "businessGoal": "Для оптимизации расходов на распределение лидов и повышения эффективности. А также максимального заполнения полей лидов необходимой информацией.",
       "expectedOutcome": "Агент заменит человека, что увеличит скорость работы и снизит  расходы ",
       "externalDependencyNote": "",
       "createdAt": "2026-05-05T08:28:58.007Z",
-      "updatedAt": "2026-05-05T08:28:58.008Z"
+      "updatedAt": "2026-05-05T10:16:17.385Z"
     }
   ]
 }
