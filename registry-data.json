@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-05-05T10:17:18.947Z",
+  "publishedAt": "2026-05-07T07:40:56.338Z",
   "version": "1.0",
   "items": [
     {
@@ -197,6 +197,24 @@
       "externalDependencyNote": "",
       "createdAt": "2026-05-05T08:28:58.007Z",
       "updatedAt": "2026-05-05T10:16:17.385Z"
+    },
+    {
+      "id": 1778139649015,
+      "type": "business",
+      "title": "Задачи на отбор закрываются автоматически",
+      "description": "В БП \"Отбор\" некоторые задачи \"Осуществить отбор\" закрываются автоматически из-за чего кладовщик не может передать ВГХ ",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 2,
+      "delayScore": 3,
+      "impactScore": 2,
+      "deadlineScore": 3,
+      "registryStatus": "in_progress",
+      "businessGoal": "Влияние на бизнес минимальное. Влияние на настроение склада - максимальное. Влияние на эффективность - среднее.",
+      "expectedOutcome": "Задачи на отбор должны создаваться и выполняться так же, как и остальные ",
+      "externalDependencyNote": "",
+      "createdAt": "2026-05-07T07:40:49.015Z",
+      "updatedAt": "2026-05-07T07:40:49.015Z"
     }
   ]
 }
