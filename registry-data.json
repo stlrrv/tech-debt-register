@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-05-12T10:52:45.279Z",
+  "publishedAt": "2026-05-14T05:52:15.810Z",
   "version": "1.0",
   "items": [
     {
@@ -278,6 +278,24 @@
       "externalDependencyNote": "",
       "createdAt": "2026-05-12T10:02:55.877Z",
       "updatedAt": "2026-05-12T10:02:55.877Z"
+    },
+    {
+      "id": 1778737928966,
+      "type": "business",
+      "title": "Не заполняются этикетки \"EAC marking\"",
+      "description": "При печати этикеток реквизиты не подставляются ",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 3,
+      "delayScore": 3,
+      "impactScore": 3,
+      "deadlineScore": 3,
+      "registryStatus": "planned",
+      "businessGoal": "Избежать штрафы на таможне из-за отсутствия этикеток.",
+      "expectedOutcome": "Печатная форма берет нужные данные из реквизитов номенклатуры ",
+      "externalDependencyNote": "",
+      "createdAt": "2026-05-14T05:52:08.966Z",
+      "updatedAt": "2026-05-14T05:52:08.967Z"
     }
   ]
 }
