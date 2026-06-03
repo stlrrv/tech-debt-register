@@ -1,6 +1,6 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-05-25T07:58:41.867Z",
+  "publishedAt": "2026-06-03T15:20:02.391Z",
   "version": "1.0",
   "items": [
     {
@@ -100,22 +100,58 @@
       "updatedAt": "2026-05-25T07:33:19.909Z"
     },
     {
-      "id": 1779695914691,
+      "id": 1780499656107,
       "type": "business",
-      "title": "Доработать конструктор поручений по замечаниям от пользователей",
-      "description": "",
-      "direction": "web",
-      "size": "S",
-      "processScore": 2,
+      "title": "Автоматическая сверка остатков 1С с маркетплейсами",
+      "description": "Автоматизировать сверку остатков с OZON, WB и ЯМ",
+      "direction": "onec",
+      "size": "L",
+      "processScore": 3,
       "delayScore": 3,
-      "impactScore": 3,
+      "impactScore": 2,
+      "deadlineScore": 2,
+      "registryStatus": "planned",
+      "businessGoal": "Сократить время ручной сверки с 1 недели до пары часов ",
+      "expectedOutcome": "Сверка будет происходить автоматически в формате отчета",
+      "externalDependencyNote": "",
+      "createdAt": "2026-06-03T15:14:16.107Z",
+      "updatedAt": "2026-06-03T15:14:16.107Z"
+    },
+    {
+      "id": 1780499820045,
+      "type": "business",
+      "title": "Передавать остатки ВИру через прикат 80% от остатка",
+      "description": "Нужно передавать 80% от реального остатка товара ",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 3,
+      "delayScore": 3,
+      "impactScore": 2,
       "deadlineScore": 3,
       "registryStatus": "planned",
-      "businessGoal": "",
-      "expectedOutcome": "",
+      "businessGoal": "Избежать штрафных санкций за нарушение клиентского сервиса",
+      "expectedOutcome": "Передаваемый остаток будет равен 80% от реального",
       "externalDependencyNote": "",
-      "createdAt": "2026-05-25T07:58:34.691Z",
-      "updatedAt": "2026-05-25T07:58:34.691Z"
+      "createdAt": "2026-06-03T15:17:00.046Z",
+      "updatedAt": "2026-06-03T15:17:00.046Z"
+    },
+    {
+      "id": 1780499964561,
+      "type": "business",
+      "title": "Автоматизация остатков М.Видео",
+      "description": "Автоматизировать передачу остатков для М.Видео",
+      "direction": "onec",
+      "size": "S",
+      "processScore": 2,
+      "delayScore": 2,
+      "impactScore": 2,
+      "deadlineScore": 3,
+      "registryStatus": "planned",
+      "businessGoal": "Высвободить время сотрудников с помощью автоматизации",
+      "expectedOutcome": "Остатки передаются автоматически с возможностью выключения",
+      "externalDependencyNote": "",
+      "createdAt": "2026-06-03T15:19:24.561Z",
+      "updatedAt": "2026-06-03T15:19:24.561Z"
     }
   ]
 }
