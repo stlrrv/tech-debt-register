@@ -1,29 +1,8 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-06-03T15:20:02.391Z",
+  "publishedAt": "2026-06-08T07:50:37.025Z",
   "version": "1.0",
   "items": [
-    {
-      "id": 1777274909878,
-      "type": "business",
-      "title": "[ОТЧЕТ] Расчет премии для рук. маркетинга",
-      "description": "Отчет автоматически считает премию руководителю маркетинга",
-      "direction": "onec",
-      "size": "S",
-      "processScore": 3,
-      "delayScore": 3,
-      "impactScore": 1,
-      "deadlineScore": 3,
-      "author": "Техлид",
-      "registryStatus": "in_progress",
-      "businessGoal": "Снижение временных трудозатрат бухгалтерии на расчет премии ",
-      "expectedOutcome": "Данные отчета соответствуют данным из приложенного эталонного файла по расчету премии за декабрь ",
-      "initiator": "Руководитель",
-      "externalDependencyNote": "Отчет по премиям для менеджеров",
-      "definitionOfDone": "Все цифры из отчета совпадают с цифрами из файла",
-      "createdAt": "2026-04-27T07:28:29.878Z",
-      "updatedAt": "2026-05-12T10:52:41.392Z"
-    },
     {
       "id": 1777279737127,
       "type": "tech",
@@ -56,12 +35,12 @@
       "delayScore": 3,
       "impactScore": 2,
       "deadlineScore": 3,
-      "registryStatus": "deferred",
+      "registryStatus": "in_progress",
       "businessGoal": "Возможность поверять тепловизоры в собственный лаборатории, а не в сторонней, что в последствии экономит деньги",
       "expectedOutcome": "Метрологи смогут самостоятельно поверять тепловизоры",
       "externalDependencyNote": "",
       "createdAt": "2026-04-27T09:33:02.651Z",
-      "updatedAt": "2026-05-11T18:24:19.401Z"
+      "updatedAt": "2026-06-08T07:50:22.725Z"
     },
     {
       "id": 1779693699538,
