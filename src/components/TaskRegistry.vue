@@ -2,7 +2,8 @@
   <div style="min-height: 100vh; background: #f9fafb; padding: 1.5rem 1rem">
     <div style="max-width: 960px; margin: 0 auto">
       <!-- ── Header ── -->
-      <div style="
+      <div
+        style="
           background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
           border-radius: 14px;
           padding: 1.5rem 2rem;
@@ -13,7 +14,8 @@
           justify-content: space-between;
           flex-wrap: wrap;
           gap: 1rem;
-        ">
+        "
+      >
         <div>
           <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700">
             Реестр задач
@@ -22,7 +24,11 @@
             Управление техническим долгом и бизнес-задачами
           </p>
         </div>
-        <button v-if="isReadOnly" class="btn btn-light btn-sm" @click="enterEditMode">
+        <button
+          v-if="isReadOnly"
+          class="btn btn-light btn-sm"
+          @click="enterEditMode"
+        >
           Войти в режим редактирования
         </button>
         <button v-else class="btn btn-light btn-sm" @click="exitEditMode">
@@ -43,14 +49,24 @@
           только смысл самой задачи.
         </p>
         <div class="template-grid" style="margin-bottom: 1rem">
-          <button v-for="preset in taskTemplates" :key="preset.key" type="button" class="template-card"
-            :class="{ active: activeTemplateKey === preset.key }" @click="applyTemplate(preset.key)">
+          <button
+            v-for="preset in taskTemplates"
+            :key="preset.key"
+            type="button"
+            class="template-card"
+            :class="{ active: activeTemplateKey === preset.key }"
+            @click="applyTemplate(preset.key)"
+          >
             <span class="template-type">{{ preset.typeLabel }}</span>
             <strong class="template-title">{{ preset.label }}</strong>
             <span class="template-desc">{{ preset.desc }}</span>
           </button>
         </div>
-        <div v-if="activeTemplateMeta" class="template-summary" style="margin-bottom: 1.25rem">
+        <div
+          v-if="activeTemplateMeta"
+          class="template-summary"
+          style="margin-bottom: 1.25rem"
+        >
           <div>
             <strong>{{ activeTemplateMeta.label }}</strong>
             <span style="color: #6b7280">
@@ -67,19 +83,42 @@
         <div class="form-grid">
           <div class="field">
             <label class="field-label">Тип задачи</label>
-            <select class="field-input" v-model="form.type" @change="updatePreview">
+            <select
+              class="field-input"
+              v-model="form.type"
+              @change="updatePreview"
+            >
               <option value="business">Бизнес-задача</option>
               <option value="tech">Техническая задача</option>
             </select>
           </div>
           <div class="field">
             <label class="field-label">Название</label>
-            <input class="field-input" v-model="form.title" type="text" placeholder="Короткое название" />
+            <input
+              class="field-input"
+              v-model="form.title"
+              type="text"
+              placeholder="Короткое название"
+            />
+          </div>
+          <div class="field">
+            <label class="field-label">Номер задачи B24</label>
+            <input
+              class="field-input"
+              v-model="form.taskNumber"
+              type="text"
+              inputmode="numeric"
+              placeholder="Например: 3322843"
+            />
           </div>
           <div class="field">
             <label class="field-label">Описание / контекст</label>
-            <textarea class="field-input" v-model="form.description" placeholder="Короткое пояснение"
-              rows="3"></textarea>
+            <textarea
+              class="field-input"
+              v-model="form.description"
+              placeholder="Короткое пояснение"
+              rows="3"
+            ></textarea>
           </div>
           <div class="field">
             <label class="field-label">Направление</label>
@@ -98,7 +137,11 @@
         <div class="form-grid">
           <div class="field">
             <label class="field-label">Размер</label>
-            <select class="field-input" v-model="form.size" @change="updatePreview">
+            <select
+              class="field-input"
+              v-model="form.size"
+              @change="updatePreview"
+            >
               <option value="S">S — до 4 ч</option>
               <option value="M">M — 1–2 дня</option>
               <option value="L">L — 3–5 дней</option>
@@ -106,32 +149,56 @@
             </select>
           </div>
           <div class="field">
-            <label class="field-label">Процесс <span class="score-weight">×3</span></label>
-            <select class="field-input" v-model="form.processScore" @change="updatePreview">
+            <label class="field-label"
+              >Процесс <span class="score-weight">×3</span></label
+            >
+            <select
+              class="field-input"
+              v-model="form.processScore"
+              @change="updatePreview"
+            >
               <option value="1">1 — косметика / вспомогательное</option>
               <option value="2">2 — важный, но не критичный</option>
               <option value="3">3 — критичный для работы</option>
             </select>
           </div>
           <div class="field">
-            <label class="field-label">Откладывание <span class="score-weight">×2</span></label>
-            <select class="field-input" v-model="form.delayScore" @change="updatePreview">
+            <label class="field-label"
+              >Откладывание <span class="score-weight">×2</span></label
+            >
+            <select
+              class="field-input"
+              v-model="form.delayScore"
+              @change="updatePreview"
+            >
               <option value="1">1 — ничего не изменится</option>
               <option value="2">2 — накопится долг</option>
               <option value="3">3 — проблема уже есть</option>
             </select>
           </div>
           <div class="field">
-            <label class="field-label">Охват <span class="score-weight">×1</span></label>
-            <select class="field-input" v-model="form.impactScore" @change="updatePreview">
+            <label class="field-label"
+              >Охват <span class="score-weight">×1</span></label
+            >
+            <select
+              class="field-input"
+              v-model="form.impactScore"
+              @change="updatePreview"
+            >
               <option value="1">1 — 1 человек</option>
               <option value="2">2 — небольшая группа</option>
               <option value="3">3 — вся команда / система</option>
             </select>
           </div>
           <div class="field">
-            <label class="field-label">Дедлайн <span class="score-weight">×1</span></label>
-            <select class="field-input" v-model="form.deadlineScore" @change="updatePreview">
+            <label class="field-label"
+              >Дедлайн <span class="score-weight">×1</span></label
+            >
+            <select
+              class="field-input"
+              v-model="form.deadlineScore"
+              @change="updatePreview"
+            >
               <option value="3">Жёсткий — в этом спринте</option>
               <option value="2">Мягкий — позже</option>
               <option value="1">Без срока</option>
@@ -140,7 +207,9 @@
         </div>
 
         <!-- Preview -->
-        <div v-if="preview" style="
+        <div
+          v-if="preview"
+          style="
             margin-top: 1rem;
             padding: 1rem 1.25rem;
             background: #eff6ff;
@@ -150,51 +219,67 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             align-items: center;
-          ">
+          "
+        >
           <div>
-            <span style="
+            <span
+              style="
                 font-size: 0.75rem;
                 color: #6b7280;
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-              ">Ценность</span>
-            <p style="
+              "
+              >Ценность</span
+            >
+            <p
+              style="
                 margin: 0.125rem 0 0;
                 font-size: 1.5rem;
                 font-weight: 700;
                 color: #1d4ed8;
-              ">
+              "
+            >
               {{ preview.value
               }}<span style="font-size: 0.875rem; color: #6b7280">/21</span>
             </p>
           </div>
           <div>
-            <span style="
+            <span
+              style="
                 font-size: 0.75rem;
                 color: #6b7280;
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-              ">Квадрант</span>
-            <p style="
+              "
+              >Квадрант</span
+            >
+            <p
+              style="
                 margin: 0.125rem 0 0;
                 font-size: 0.9375rem;
                 font-weight: 600;
                 color: #1e3a8a;
-              ">
+              "
+            >
               {{ preview.quadrant }}
             </p>
           </div>
           <div>
-            <span style="
+            <span
+              style="
                 font-size: 0.75rem;
                 color: #6b7280;
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-              ">Рекомендация</span>
-            <p style="margin: 0.125rem 0 0; font-size: 0.875rem; color: #1e3a8a">
+              "
+              >Рекомендация</span
+            >
+            <p
+              style="margin: 0.125rem 0 0; font-size: 0.875rem; color: #1e3a8a"
+            >
               {{ preview.recommendation }}
             </p>
           </div>
@@ -225,8 +310,12 @@
           <div class="form-grid">
             <div class="field">
               <label class="field-label">Последствие</label>
-              <textarea class="field-input" v-model="form.consequence" placeholder="Если не сделаем, то…"
-                rows="3"></textarea>
+              <textarea
+                class="field-input"
+                v-model="form.consequence"
+                placeholder="Если не сделаем, то…"
+                rows="3"
+              ></textarea>
             </div>
             <div class="field">
               <label class="field-label">Уровень риска</label>
@@ -285,18 +374,30 @@
           <div class="form-grid">
             <div class="field">
               <label class="field-label">Бизнес-цель</label>
-              <textarea class="field-input" v-model="form.businessGoal" placeholder="Что хотим получить для бизнеса"
-                rows="3"></textarea>
+              <textarea
+                class="field-input"
+                v-model="form.businessGoal"
+                placeholder="Что хотим получить для бизнеса"
+                rows="3"
+              ></textarea>
             </div>
             <div class="field">
               <label class="field-label">Ожидаемый результат</label>
-              <textarea class="field-input" v-model="form.expectedOutcome" placeholder="Что изменится после выполнения"
-                rows="3"></textarea>
+              <textarea
+                class="field-input"
+                v-model="form.expectedOutcome"
+                placeholder="Что изменится после выполнения"
+                rows="3"
+              ></textarea>
             </div>
             <div class="field">
               <label class="field-label">Внешняя зависимость</label>
-              <textarea class="field-input" v-model="form.externalDependencyNote"
-                placeholder="Короткий текст или комментарий" rows="3"></textarea>
+              <textarea
+                class="field-input"
+                v-model="form.externalDependencyNote"
+                placeholder="Короткий текст или комментарий"
+                rows="3"
+              ></textarea>
             </div>
           </div>
         </template>
@@ -305,7 +406,11 @@
           <button class="btn btn-primary" @click="submitTask">
             {{ editingTaskId ? "Сохранить изменения" : "Добавить задачу" }}
           </button>
-          <button v-if="editingTaskId" class="btn btn-light" @click="cancelEdit">
+          <button
+            v-if="editingTaskId"
+            class="btn btn-light"
+            @click="cancelEdit"
+          >
             Отмена
           </button>
         </div>
@@ -313,44 +418,56 @@
 
       <!-- ── Quadrant Matrix ── -->
       <div class="card" style="margin-bottom: 1.5rem">
-        <div style="
+        <div
+          style="
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1rem;
-          ">
+          "
+        >
           <h2 class="section-title" style="margin: 0">
             Матрица ценности и усилий
           </h2>
-          <button class="btn btn-light btn-xs" @click="quadrantCollapsed = !quadrantCollapsed">
+          <button
+            class="btn btn-light btn-xs"
+            @click="quadrantCollapsed = !quadrantCollapsed"
+          >
             {{ quadrantCollapsed ? "Развернуть" : "Свернуть" }}
           </button>
         </div>
-        <div v-if="!quadrantCollapsed" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem">
-          <div v-for="q in quadrantDefs" :key="q.key"
-            :style="`background:${q.bg};border:1.5px solid ${q.border};border-radius:10px;padding:1rem;`">
-            <p :style="`margin:0 0 0.125rem;font-weight:700;font-size:0.875rem;color:${q.color};`">
+        <div
+          v-if="!quadrantCollapsed"
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem"
+        >
+          <div
+            v-for="q in quadrantDefs"
+            :key="q.key"
+            :style="`background:${q.bg};border:1.5px solid ${q.border};border-radius:10px;padding:1rem;`"
+          >
+            <p
+              :style="`margin:0 0 0.125rem;font-weight:700;font-size:0.875rem;color:${q.color};`"
+            >
               {{ q.label }}
             </p>
-            <p :style="`margin:0 0 0.625rem;font-size:0.75rem;color:${q.color};opacity:0.7;`">
+            <p
+              :style="`margin:0 0 0.625rem;font-size:0.75rem;color:${q.color};opacity:0.7;`"
+            >
               {{ q.desc }}
             </p>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.375rem;">
-              <div v-for="task in quadrantTasks[q.key]" :key="task.id" class="quad-task"
-                :class="{ 'task-done': task.registryStatus === 'done', 'task-deferred': task.registryStatus === 'deferred' }"
-                @click="scrollToTask(task.id)">
-                <span class="quad-task-pill"
-                  :style="`background:rgba(255,255,255,0.7);border:1px solid ${q.border};border-radius:9999px;padding:0.35rem 0.65rem;font-size:0.75rem;font-weight:500;color:${q.color};display:inline-flex;align-items:center;gap:0.3rem;position:relative;`">
-                  <span v-if="task.registryStatus === 'done'" class="status-sticker-inline sticker-done-inline">✓</span>
-                  <span v-else-if="task.registryStatus === 'deferred'"
-                    class="status-sticker-inline sticker-deferred-inline">
-                    ⏸
-                  </span>
-                  <span>{{ task.title }}</span>
-                </span>
-              </div>
-              <span v-if="!quadrantTasks[q.key]?.length"
-                :style="`font-size:0.75rem;color:${q.color};opacity:0.4;font-style:italic;`">Нет задач</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.375rem">
+              <span
+                v-for="task in quadrantTasks[q.key]"
+                :key="task.id"
+                :style="`background:rgba(255,255,255,0.7);border:1px solid ${q.border};border-radius:9999px;padding:0.25rem 0.625rem;font-size:0.75rem;font-weight:500;color:${q.color};`"
+              >
+                {{ taskLabel(task) }}
+              </span>
+              <span
+                v-if="!quadrantTasks[q.key]?.length"
+                :style="`font-size:0.75rem;color:${q.color};opacity:0.4;font-style:italic;`"
+                >Нет задач</span
+              >
             </div>
           </div>
         </div>
@@ -358,19 +475,31 @@
 
       <!-- ── Task List ── -->
       <div class="card">
-        <div style="
+        <div
+          style="
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 1rem;
-          ">
+          "
+        >
           <h2 class="section-title">
             Список задач
-            <span style="font-size: 0.875rem; font-weight: 400; color: #6b7280">({{ sortedTasks.length }})</span>
+            <span style="font-size: 0.875rem; font-weight: 400; color: #6b7280"
+              >({{ sortedTasks.length }})</span
+            >
           </h2>
           <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
+            <div class="field" style="min-width: 180px">
+              <label class="field-label">Тип задачи</label>
+              <select class="field-input" v-model="typeFilter">
+                <option value="business">Бизнес-задачи</option>
+                <option value="tech">Тех. долг</option>
+                <option value="all">Все типы</option>
+              </select>
+            </div>
             <div class="field" style="min-width: 180px">
               <label class="field-label">Направление</label>
               <select class="field-input" v-model="directionFilter">
@@ -388,58 +517,58 @@
                 <option value="status">По статусу</option>
               </select>
             </div>
-            <div class="field" style="min-width: 150px">
-              <label class="field-label">Колонки</label>
-              <select class="field-input" v-model.number="listColumnsCount">
-                <option value="1">1 колонка</option>
-                <option value="2">2 колонки</option>
-                <option value="3">3 колонки</option>
-              </select>
-            </div>
           </div>
         </div>
-        <div v-if="sortedTasks.length === 0" style="padding: 3rem 0; text-align: center; color: #9ca3af">
+        <div
+          v-if="sortedTasks.length === 0"
+          style="padding: 3rem 0; text-align: center; color: #9ca3af"
+        >
           Задач пока нет{{
             !isReadOnly ? ". Добавьте первую задачу выше." : "."
           }}
         </div>
-        <div v-else :class="`task-list-grid task-list-cols-${listColumnsCount}`">
-          <div v-for="task in sortedTasks" :key="task.id" :data-task-id="task.id" :class="[
-            'task-card',
-            { 'task-highlighted': highlightedTaskId === task.id },
-            `cols-${listColumnsCount}`
-          ]" :ref="el => { if (el && highlightedTaskId === task.id) { taskListRefs[task.id] = el; } }">
-            <!-- Task header row (1-2 columns) -->
-            <div v-if="listColumnsCount !== 3" class="task-header" style="
+        <div v-else style="display: flex; flex-direction: column; gap: 0.75rem">
+          <div
+            v-for="task in sortedTasks"
+            :key="task.id"
+            style="
+              border: 1.5px solid #e5e7eb;
+              border-radius: 10px;
+              padding: 1rem 1.25rem;
+              background: #fff;
+              transition: border-color 0.15s;
+            "
+          >
+            <!-- Task header row -->
+            <div
+              style="
                 display: flex;
                 align-items: flex-start;
                 justify-content: space-between;
                 gap: 0.75rem;
                 margin-bottom: 0.5rem;
-                width: 100%;
-              ">
-              <p class="task-title" style="
+              "
+            >
+              <p
+                style="
                   margin: 0;
                   font-weight: 700;
                   font-size: 0.9375rem;
                   color: #111827;
                   line-height: 1.4;
-                  overflow-wrap: break-word;
-                  word-break: break-word;
-                  hyphens: auto;
-                  flex: 1;
-                  min-width: 0;
-                ">
-                {{ task.title }}
+                "
+              >
+                {{ taskLabel(task) }}
               </p>
-              <div class="task-stickers" style="
+              <div
+                style="
                   display: flex;
                   gap: 0.375rem;
                   flex-shrink: 0;
                   flex-wrap: wrap;
                   align-items: center;
-                  justify-content: flex-end;
-                ">
+                "
+              >
                 <span class="badge" :style="typeBadgeStyle(task.type)">{{
                   task.type === "tech" ? "Тех. долг" : "Бизнес"
                 }}</span>
@@ -449,118 +578,107 @@
                 <span class="badge" :style="dirBadgeStyle(task.direction)">{{
                   dirLabel(task.direction)
                 }}</span>
-                <span class="badge" :style="statusBadgeStyle(task.registryStatus)">{{ statusLabel(task.registryStatus)
-                }}</span>
+                <span
+                  class="badge"
+                  :style="statusBadgeStyle(task.registryStatus)"
+                  >{{ statusLabel(task.registryStatus) }}</span
+                >
               </div>
             </div>
-            <!-- Task header row (3 columns) -->
-            <div v-else class="task-header" style="
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: 0.75rem;
-                margin-bottom: 0.375rem;
-                width: 100%;
-              ">
-              <p class="task-title" style="
-                  margin: 0;
-                  font-weight: 700;
-                  font-size: 0.9375rem;
-                  color: #111827;
-                  line-height: 1.4;
-                  overflow-wrap: break-word;
-                  word-break: break-word;
-                  hyphens: auto;
-                  flex: 1;
-                  min-width: 0;
-                ">
-                {{ task.title }}
-              </p>
-            </div>
-            <!-- Stickers row (3 columns only) -->
-            <div v-if="listColumnsCount === 3" class="task-stickers" style="
-                display: flex;
-                gap: 0.375rem;
-                flex-wrap: wrap;
-                align-items: center;
-                margin-bottom: 0.5rem;
-              ">
-              <span class="badge" :style="typeBadgeStyle(task.type)">{{
-                task.type === "tech" ? "Тех. долг" : "Бизнес"
-              }}</span>
-              <span class="badge" :style="sizeBadgeStyle(task.size)">{{
-                task.size
-              }}</span>
-              <span class="badge" :style="dirBadgeStyle(task.direction)">{{
-                dirLabel(task.direction)
-              }}</span>
-              <span class="badge" :style="statusBadgeStyle(task.registryStatus)">{{ statusLabel(task.registryStatus)
-              }}</span>
-            </div>
             <!-- Score row -->
-            <div class="task-scores" style="
+            <div
+              style="
                 display: flex;
                 align-items: center;
                 gap: 1rem;
                 margin-bottom: 0.5rem;
-                flex-wrap: wrap;
-              ">
-              <span style="font-weight: 700; color: #2563eb; font-size: 0.9375rem">{{ calcValue(task)
-              }}<span style="font-size: 0.8rem; color: #9ca3af; font-weight: 400">/21</span></span>
-              <span style="
+              "
+            >
+              <span
+                style="font-weight: 700; color: #2563eb; font-size: 0.9375rem"
+                >{{ calcValue(task)
+                }}<span
+                  style="font-size: 0.8rem; color: #9ca3af; font-weight: 400"
+                  >/21</span
+                ></span
+              >
+              <span
+                style="
                   font-size: 0.8125rem;
                   color: #6b7280;
                   background: #f3f4f6;
                   padding: 0.125rem 0.625rem;
                   border-radius: 9999px;
-                ">{{ getQuadrant(calcValue(task), task.size) }}</span>
+                "
+                >{{ getQuadrant(calcValue(task), task.size) }}</span
+              >
             </div>
             <!-- Description -->
-            <p v-if="task.description" class="task-description" style="
+            <p
+              v-if="task.description"
+              style="
                 margin: 0 0 0.5rem;
                 font-size: 0.875rem;
                 color: #4b5563;
                 line-height: 1.5;
-                overflow-wrap: break-word;
-                word-break: break-word;
-              ">
+              "
+            >
               {{ task.description }}
             </p>
             <!-- Context row -->
-            <p class="task-context"
-              style="margin: 0 0 0.75rem; font-size: 0.8125rem; color: #9ca3af; overflow-wrap: break-word; word-break: break-word;">
+            <p
+              style="margin: 0 0 0.75rem; font-size: 0.8125rem; color: #9ca3af"
+            >
               <template v-if="task.type === 'tech'">
-                <span :style="`color:${riskColor(task.riskLevel)};font-weight:600;`">{{ riskLabel(task.riskLevel)
-                }}</span>
+                <span
+                  :style="`color:${riskColor(task.riskLevel)};font-weight:600;`"
+                  >{{ riskLabel(task.riskLevel) }}</span
+                >
                 Горит: {{ burnLabel(task.burnHorizon) }} ·
                 {{ task.techCategory }} <br />
                 Последствие: {{ burnLabel(task.consequence) }} <br />
                 <template v-if="task.needsDecomposition">
-                  Нужна декомпозиция</template><br />
+                  Нужна декомпозиция</template
+                ><br />
                 <template v-if="task.needsTechLead"> Нужен техлид</template>
               </template>
               <template v-else>
-                <template v-if="task.businessGoal && listColumnsCount !== 3"><br />
-                  Бизнес-цель: {{ task.businessGoal }}</template><br />
+                <template v-if="task.businessGoal"
+                  ><br />
+                  Бизнес-цель: {{ task.businessGoal }}</template
+                ><br />
                 <template v-if="task.externalDependencyNote">
                   Внешняя зависимость:
-                  {{ task.externalDependencyNote }}</template>
+                  {{ task.externalDependencyNote }}</template
+                >
               </template>
             </p>
             <!-- Footer row -->
-            <div style="
+            <div
+              style="
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 flex-wrap: wrap;
                 gap: 0.5rem;
-              ">
-              <span style="font-size: 0.75rem; color: #9ca3af">{{ formatDate(task.createdAt) }}</span>
+              "
+            >
+              <span style="font-size: 0.75rem; color: #9ca3af">{{
+                formatDate(task.createdAt)
+              }}</span>
               <div style="display: flex; gap: 0.375rem">
-                <button v-if="!isReadOnly" class="btn btn-light btn-xs" @click="startEdit(task)">
+                <button
+                  v-if="!isReadOnly"
+                  class="btn btn-light btn-xs"
+                  @click="startEdit(task)"
+                >
                   Редактировать
                 </button>
-                <button v-if="!isReadOnly" class="btn btn-danger btn-xs" @click="deleteTask(task.id)">
+                <button
+                  v-if="!isReadOnly"
+                  class="btn btn-danger btn-xs"
+                  @click="deleteTask(task.id)"
+                >
                   Удалить
                 </button>
               </div>
@@ -570,19 +688,28 @@
       </div>
 
       <!-- ── Export / Import ── -->
-      <div v-if="!isReadOnly" style="
+      <div
+        v-if="!isReadOnly"
+        style="
           margin-top: 1rem;
           display: flex;
           justify-content: flex-end;
           gap: 0.75rem;
-        ">
+        "
+      >
         <button class="btn btn-light btn-sm" @click="exportJSON">
           ⬇ Экспорт в JSON
         </button>
         <button class="btn btn-light btn-sm" @click="triggerImport">
           ⬆ Импорт из файла
         </button>
-        <input ref="importInput" type="file" accept=".json" style="display: none" @change="importJSON" />
+        <input
+          ref="importInput"
+          type="file"
+          accept=".json"
+          style="display: none"
+          @change="importJSON"
+        />
       </div>
     </div>
   </div>
@@ -599,14 +726,13 @@ const importInput = ref(null);
 const preview = ref(null);
 const activeTemplateKey = ref("");
 const sortBy = ref("priority");
+const typeFilter = ref("business");
 const directionFilter = ref("all");
-const listColumnsCount = ref(1);
-const highlightedTaskId = ref(null);
-const taskListRefs = {};
 
 const defaultForm = () => ({
   type: "business",
   title: "",
+  taskNumber: "",
   description: "",
   direction: "web",
   size: "S",
@@ -800,8 +926,15 @@ const statusOrder = {
 };
 
 const filteredTasks = computed(() => {
-  if (directionFilter.value === "all") return tasks.value;
-  return tasks.value.filter((task) => task.direction === directionFilter.value);
+  return tasks.value.filter((task) => {
+    const typeMatch =
+      typeFilter.value === "all" ? true : task.type === typeFilter.value;
+    const directionMatch =
+      directionFilter.value === "all"
+        ? true
+        : task.direction === directionFilter.value;
+    return typeMatch && directionMatch;
+  });
 });
 
 const sortedTasks = computed(() => {
@@ -855,7 +988,7 @@ const quadrantDefs = [
   {
     key: "no",
     label: "Пока не делаем",
-    desc: "Низкая ценность · Большие усилия · Ожидаем анализ от отдела поддержки",
+    desc: "Низкая ценность · Большие усилия",
     bg: "#fff7ed",
     border: "#fdba74",
     color: "#9a3412",
@@ -985,7 +1118,7 @@ function statusBadgeStyle(s) {
 function riskColor(r) {
   return (
     { critical: "#dc2626", high: "#ea580c", medium: "#d97706", low: "#16a34a" }[
-    r
+      r
     ] || "#6b7280"
   );
 }
@@ -1028,12 +1161,16 @@ function dirLabel(d) {
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString("ru-RU");
 }
+function taskLabel(task) {
+  return task.taskNumber ? `#${task.taskNumber} · ${task.title}` : task.title;
+}
 
 // ─── CRUD ─────────────────────────────────────────────────────────────────────
 function formToTask() {
   const base = {
     type: form.type,
     title: form.title,
+    taskNumber: String(form.taskNumber || "").trim(),
     description: form.description,
     direction: form.direction,
     size: form.size,
@@ -1093,6 +1230,7 @@ function startEdit(task) {
   Object.assign(form, {
     type: task.type,
     title: task.title,
+    taskNumber: task.taskNumber || "",
     description: task.description,
     direction: task.direction,
     size: task.size,
@@ -1188,29 +1326,6 @@ function importJSON(e) {
   e.target.value = "";
 }
 
-function scrollToTask(taskId) {
-  const task = tasks.value.find(t => t.id === taskId);
-  if (!task) return;
-
-  highlightedTaskId.value = taskId;
-
-  // Wait for DOM to update, then scroll
-  setTimeout(() => {
-    const element = document.querySelector(`[data-task-id="${taskId}"]`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      element.focus();
-    }
-  }, 50);
-
-  // Remove highlight after 5 seconds
-  setTimeout(() => {
-    if (highlightedTaskId.value === taskId) {
-      highlightedTaskId.value = null;
-    }
-  }, 5000);
-}
-
 onMounted(async () => {
   try {
     const res = await fetch("registry-data.json");
@@ -1220,7 +1335,7 @@ onMounted(async () => {
       isReadOnly.value = true;
       return;
     }
-  } catch { }
+  } catch {}
   const stored = localStorage.getItem("taskRegistry");
   if (stored) tasks.value = JSON.parse(stored);
   updatePreview();
@@ -1235,14 +1350,12 @@ onMounted(async () => {
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
-
 .section-title {
   margin: 0 0 1rem;
   font-size: 1.0625rem;
   font-weight: 700;
   color: #111827;
 }
-
 .group-label {
   margin: 0 0 0.75rem;
   font-size: 0.75rem;
@@ -1251,24 +1364,20 @@ onMounted(async () => {
   letter-spacing: 0.06em;
   color: #6b7280;
 }
-
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-
 @media (max-width: 600px) {
   .form-grid {
     grid-template-columns: 1fr;
   }
 }
-
 .field {
   display: flex;
   flex-direction: column;
 }
-
 .score-weight {
   font-size: 0.7rem;
   color: #9ca3af;
@@ -1279,32 +1388,27 @@ onMounted(async () => {
   margin-left: 4px;
   vertical-align: middle;
 }
-
 .helper-text {
   margin: 0;
   font-size: 0.875rem;
   color: #6b7280;
   line-height: 1.5;
 }
-
 .template-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
 }
-
 @media (max-width: 900px) {
   .template-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
 @media (max-width: 600px) {
   .template-grid {
     grid-template-columns: 1fr;
   }
 }
-
 .template-card {
   display: flex;
   flex-direction: column;
@@ -1323,19 +1427,16 @@ onMounted(async () => {
     transform 0.15s ease,
     box-shadow 0.15s ease;
 }
-
 .template-card:hover {
   border-color: #93c5fd;
   background: #eff6ff;
   transform: translateY(-1px);
 }
-
 .template-card.active {
   border-color: #2563eb;
   background: #dbeafe;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
-
 .template-type {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -1343,18 +1444,15 @@ onMounted(async () => {
   letter-spacing: 0.06em;
   color: #6b7280;
 }
-
 .template-title {
   font-size: 0.9375rem;
   line-height: 1.3;
 }
-
 .template-desc {
   font-size: 0.8125rem;
   color: #6b7280;
   line-height: 1.45;
 }
-
 .template-summary {
   padding: 0.875rem 1rem;
   border-radius: 10px;
@@ -1363,230 +1461,5 @@ onMounted(async () => {
   color: #1e3a8a;
   font-size: 0.875rem;
   line-height: 1.5;
-}
-
-/* Quadrant task stickers and state styles */
-.quad-task {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-
-.quad-task:hover {
-  transform: translateY(-2px);
-}
-
-.status-sticker {
-  position: absolute;
-  top: -8px;
-  left: 0;
-  transform: translateY(-50%);
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.12rem 0.5rem;
-  border-radius: 9999px;
-  color: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-.sticker-done {
-  background: #16a34a;
-}
-
-.sticker-deferred {
-  background: #6b7280;
-}
-
-.status-sticker-inline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0 0.15rem;
-  min-width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 999px;
-  color: #fff;
-}
-
-.sticker-done-inline {
-  background: #16a34a;
-}
-
-.sticker-deferred-inline {
-  background: #6b7280;
-}
-
-.quad-task-pill {
-  transition: opacity 0.15s, text-decoration 0.15s;
-}
-
-.task-done .quad-task-pill {
-  text-decoration: line-through;
-  opacity: 0.85;
-}
-
-.task-deferred .quad-task-pill {
-  opacity: 0.6;
-}
-
-/* Task list grid display modes */
-.task-list-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.task-list-cols-1 {
-  grid-template-columns: 1fr;
-}
-
-.task-list-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.task-list-cols-3 {
-  grid-template-columns: repeat(3, minmax(320px, 1fr));
-  gap: 0.6rem;
-}
-
-/* Task card base styles with word-break */
-.task-card {
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  background: #fff;
-  transition: border-color 0.15s, box-shadow 0.3s, background-color 0.3s;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.task-card.cols-2 .task-stickers {
-  max-width: 180px;
-}
-
-.task-card.cols-3 .task-stickers {
-  max-width: 130px;
-}
-
-/* Compact styles for 3-column layout */
-.task-card.cols-3 {
-  padding: 0.875rem 0.875rem;
-}
-
-.task-card.cols-3 .task-title {
-  font-size: 0.8125rem;
-  line-height: 1.3;
-  margin-bottom: 0.35rem;
-}
-
-.task-card.cols-3 .task-description {
-  font-size: 0.7rem;
-  line-height: 1.35;
-  margin-bottom: 0.35rem;
-}
-
-.task-card.cols-3 .task-context {
-  font-size: 0.7rem;
-  line-height: 1.3;
-  margin-bottom: 0.35rem;
-}
-
-.task-card.cols-3 .badge {
-  font-size: 0.65rem;
-  padding: 0.125rem 0.375rem;
-  margin: 0.125rem 0.125rem 0 0;
-}
-
-.task-card.cols-3 .task-header {
-  margin-bottom: 0.25rem;
-}
-
-.task-card.cols-3 .task-scores {
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-  font-size: 0.75rem;
-}
-
-/* Responsive breakpoints */
-@media (max-width: 1400px) {
-  .task-list-cols-3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .task-card.cols-3 {
-    padding: 0.9375rem 1rem;
-  }
-
-  .task-card.cols-3 .task-title {
-    font-size: 0.875rem;
-  }
-
-  .task-card.cols-3 .task-description,
-  .task-card.cols-3 .task-context {
-    font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 900px) {
-
-  .task-list-cols-2,
-  .task-list-cols-3 {
-    grid-template-columns: 1fr;
-  }
-
-  .task-card.cols-2,
-  .task-card.cols-3 {
-    padding: 1rem 1.25rem;
-  }
-
-  .task-card.cols-2 .task-title,
-  .task-card.cols-3 .task-title {
-    font-size: 0.9375rem;
-  }
-
-  .task-card.cols-3 .task-description,
-  .task-card.cols-3 .task-context {
-    font-size: 0.8125rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .task-list-grid {
-    gap: 0.5rem;
-  }
-
-  .task-card {
-    padding: 0.75rem 1rem;
-  }
-
-  .task-card .task-title {
-    font-size: 0.875rem;
-  }
-
-  .task-card .task-description,
-  .task-card .task-context {
-    font-size: 0.75rem;
-  }
-}
-
-/* Task highlight animation */
-.task-highlighted {
-  border-color: #2563eb !important;
-  background-color: #eff6ff !important;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), inset 0 0 12px rgba(37, 99, 235, 0.08) !important;
-  animation: highlightPulse 0.5s ease-out;
-}
-
-@keyframes highlightPulse {
-  0% {
-    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.3), inset 0 0 12px rgba(37, 99, 235, 0.15);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0px rgba(37, 99, 235, 0), inset 0 0 12px rgba(37, 99, 235, 0.08);
-  }
 }
 </style>
