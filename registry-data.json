@@ -1,12 +1,12 @@
 {
   "registryName": "Task Registry",
-  "publishedAt": "2026-06-17T11:52:32.388Z",
+  "publishedAt": "2026-07-02T12:57:28.809Z",
   "version": "1.0",
   "items": [
     {
       "id": 1777279737127,
       "type": "tech",
-      "title": "[ТД] Ввести unit-тестирование в основной продукт (сайт)",
+      "title": "Ввести unit-тестирование в основной продукт (сайт)",
       "description": "Юнит-тесты - это основа «пирамиды тестирования», обеспечивающая базовый уровень проверки работоспособности сайта",
       "direction": "web",
       "size": "XL",
@@ -22,25 +22,7 @@
       "needsDecomposition": true,
       "needsTechLead": true,
       "createdAt": "2026-04-27T08:48:57.127Z",
-      "updatedAt": "2026-04-27T08:49:39.404Z"
-    },
-    {
-      "id": 1777282382650,
-      "type": "business",
-      "title": "Доработать ПО для поверки тепловизоров",
-      "description": "Исправить найденные пользователями ошибки в ПО",
-      "direction": "web",
-      "size": "S",
-      "processScore": 3,
-      "delayScore": 3,
-      "impactScore": 2,
-      "deadlineScore": 3,
-      "registryStatus": "in_progress",
-      "businessGoal": "Возможность поверять тепловизоры в собственный лаборатории, а не в сторонней, что в последствии экономит деньги",
-      "expectedOutcome": "Метрологи смогут самостоятельно поверять тепловизоры",
-      "externalDependencyNote": "",
-      "createdAt": "2026-04-27T09:33:02.651Z",
-      "updatedAt": "2026-06-08T07:50:22.725Z"
+      "updatedAt": "2026-07-02T12:56:55.480Z"
     },
     {
       "id": 1779693699538,
@@ -53,12 +35,12 @@
       "delayScore": 2,
       "impactScore": 3,
       "deadlineScore": 3,
-      "registryStatus": "planned",
+      "registryStatus": "deferred",
       "businessGoal": "Ежедневное автоматическое формирование потребностей между складами сократит время ручного труда и количество потенциальных ошибок",
       "expectedOutcome": "Потребность формируется автоматически по правилам описанным в ТЗ",
       "externalDependencyNote": "",
       "createdAt": "2026-05-25T07:21:39.538Z",
-      "updatedAt": "2026-05-25T07:21:39.538Z"
+      "updatedAt": "2026-07-02T12:56:45.930Z"
     },
     {
       "id": 1779694399909,
@@ -95,42 +77,6 @@
       "externalDependencyNote": "",
       "createdAt": "2026-06-03T15:14:16.107Z",
       "updatedAt": "2026-06-03T15:14:16.107Z"
-    },
-    {
-      "id": 1780499820045,
-      "type": "business",
-      "title": "Передавать остатки ВИру через прикат 80% от остатка",
-      "description": "Нужно передавать 80% от реального остатка товара ",
-      "direction": "onec",
-      "size": "S",
-      "processScore": 3,
-      "delayScore": 3,
-      "impactScore": 2,
-      "deadlineScore": 3,
-      "registryStatus": "planned",
-      "businessGoal": "Избежать штрафных санкций за нарушение клиентского сервиса",
-      "expectedOutcome": "Передаваемый остаток будет равен 80% от реального",
-      "externalDependencyNote": "",
-      "createdAt": "2026-06-03T15:17:00.046Z",
-      "updatedAt": "2026-06-03T15:17:00.046Z"
-    },
-    {
-      "id": 1780499964561,
-      "type": "business",
-      "title": "Автоматизация остатков М.Видео",
-      "description": "Автоматизировать передачу остатков для М.Видео",
-      "direction": "onec",
-      "size": "S",
-      "processScore": 2,
-      "delayScore": 2,
-      "impactScore": 2,
-      "deadlineScore": 3,
-      "registryStatus": "planned",
-      "businessGoal": "Высвободить время сотрудников с помощью автоматизации",
-      "expectedOutcome": "Остатки передаются автоматически с возможностью выключения",
-      "externalDependencyNote": "",
-      "createdAt": "2026-06-03T15:19:24.561Z",
-      "updatedAt": "2026-06-03T15:19:24.561Z"
     },
     {
       "id": 1781695056114,
