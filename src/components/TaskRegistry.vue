@@ -72,7 +72,11 @@
             </label>
             <label class="field">
               <span class="field-label">Тип задачи</span>
-              <select v-model="form.type" class="field-input" @change="updatePreview">
+              <select
+                v-model="form.type"
+                class="field-input"
+                @change="updatePreview"
+              >
                 <option value="business">Бизнес-задача</option>
                 <option value="tech">Техническая задача</option>
               </select>
@@ -159,7 +163,11 @@
           <div class="form-grid">
             <label class="field">
               <span class="field-label">Усилия</span>
-              <select v-model="form.size" class="field-input" @change="updatePreview">
+              <select
+                v-model="form.size"
+                class="field-input"
+                @change="updatePreview"
+              >
                 <option value="S">S — до 4 ч</option>
                 <option value="M">M — 1–2 дня</option>
                 <option value="L">L — 3–5 дней</option>
@@ -168,7 +176,11 @@
             </label>
             <label class="field">
               <span class="field-label">Откладывание ×2</span>
-              <select v-model="form.delayScore" class="field-input" @change="updatePreview">
+              <select
+                v-model="form.delayScore"
+                class="field-input"
+                @change="updatePreview"
+              >
                 <option value="1">1 — ничего не изменится</option>
                 <option value="2">2 — накопится долг</option>
                 <option value="3">3 — проблема уже есть</option>
@@ -176,15 +188,25 @@
             </label>
             <label class="field">
               <span class="field-label">Охват ×1</span>
-              <select v-model="form.impactScore" class="field-input" @change="updatePreview">
+              <select
+                v-model="form.impactScore"
+                class="field-input"
+                @change="updatePreview"
+              >
                 <option value="1">1 — точечная задача</option>
                 <option value="2">2 — затрагивает команду / отдел</option>
-                <option value="3">3 — влияет на несколько ролей / систем</option>
+                <option value="3">
+                  3 — влияет на несколько ролей / систем
+                </option>
               </select>
             </label>
             <label class="field">
               <span class="field-label">Дедлайн ×1</span>
-              <select v-model="form.deadlineScore" class="field-input" @change="updatePreview">
+              <select
+                v-model="form.deadlineScore"
+                class="field-input"
+                @change="updatePreview"
+              >
                 <option value="3">3 — жесткий внешний срок</option>
                 <option value="2">2 — желательно в ближайшее время</option>
                 <option value="1">1 — без жесткого срока</option>
@@ -261,7 +283,9 @@
             </div>
             <div class="preview-item">
               <span>Процесс ×3</span>
-              <strong>{{ processBandLabel(previewMetrics.processScore) }}</strong>
+              <strong>{{
+                processBandLabel(previewMetrics.processScore)
+              }}</strong>
             </div>
             <div class="preview-item">
               <span>Ценность</span>
@@ -446,12 +470,18 @@
             <div class="card-kicker">Спринт</div>
             <h2 class="section-title">Квадранты текущего спринта</h2>
             <p class="section-caption">
-              Здесь показываются только задачи со статусами «В спринте» и
-              «В работе».
+              Здесь показываются только задачи со статусами «В спринте» и «В
+              работе».
             </p>
           </div>
-          <button class="btn btn-light" type="button" @click="quadrantCollapsed = !quadrantCollapsed">
-            {{ quadrantCollapsed ? "Показать квадранты" : "Свернуть квадранты" }}
+          <button
+            class="btn btn-light"
+            type="button"
+            @click="quadrantCollapsed = !quadrantCollapsed"
+          >
+            {{
+              quadrantCollapsed ? "Показать квадранты" : "Свернуть квадранты"
+            }}
           </button>
         </div>
 
@@ -467,7 +497,9 @@
                 <h3>{{ quadrant.label }}</h3>
                 <p>{{ quadrant.desc }}</p>
               </div>
-              <span class="quadrant-count">{{ sprintQuadrants[quadrant.key].length }}</span>
+              <span class="quadrant-count">{{
+                sprintQuadrants[quadrant.key].length
+              }}</span>
             </div>
 
             <div v-if="sprintQuadrants[quadrant.key].length" class="dot-wrap">
@@ -501,7 +533,11 @@
         </div>
 
         <div v-if="visibleQueueTasks.length" class="queue-list">
-          <article v-for="task in visibleQueueTasks" :key="task.id" class="queue-item">
+          <article
+            v-for="task in visibleQueueTasks"
+            :key="task.id"
+            class="queue-item"
+          >
             <div class="queue-main">
               <div class="queue-position">
                 <template v-if="!isReadOnly">
@@ -523,26 +559,44 @@
                   <span class="value-chip">{{ calcValue(task) }}/21</span>
                 </div>
                 <div class="chip-row">
-                  <span class="chip">{{ task.type === "tech" ? "Техническая" : "Бизнес" }}</span>
+                  <span class="chip">{{
+                    task.type === "tech" ? "Техническая" : "Бизнес"
+                  }}</span>
                   <span class="chip">{{ dirLabel(task.direction) }}</span>
                   <span class="chip">{{ task.customerDepartment }}</span>
-                  <span class="chip">{{ statusLabel(task.registryStatus) }}</span>
-                  <span class="chip">{{ processBandLabel(getProcessScore(task)) }}</span>
+                  <span class="chip">{{
+                    statusLabel(task.registryStatus)
+                  }}</span>
+                  <span class="chip">{{
+                    processBandLabel(getProcessScore(task))
+                  }}</span>
                 </div>
-                <p class="queue-text">{{ task.description || "Описание не заполнено." }}</p>
+                <p class="queue-text">
+                  {{ task.description || "Описание не заполнено." }}
+                </p>
               </div>
             </div>
             <div v-if="!isReadOnly" class="row-actions">
-              <button class="btn btn-light" type="button" @click="startEdit(task)">
+              <button
+                class="btn btn-light"
+                type="button"
+                @click="startEdit(task)"
+              >
                 Редактировать
               </button>
-              <button class="btn btn-danger" type="button" @click="deleteTask(task.id)">
+              <button
+                class="btn btn-danger"
+                type="button"
+                @click="deleteTask(task.id)"
+              >
                 Удалить
               </button>
             </div>
           </article>
         </div>
-        <p v-else class="empty-state">В очереди нет задач для текущих фильтров.</p>
+        <p v-else class="empty-state">
+          В очереди нет задач для текущих фильтров.
+        </p>
       </section>
 
       <section class="card">
@@ -560,20 +614,34 @@
                 <span class="value-chip">{{ calcValue(task) }}/21</span>
               </div>
               <div class="chip-row">
-                <span class="chip">{{ task.type === "tech" ? "Техническая" : "Бизнес" }}</span>
+                <span class="chip">{{
+                  task.type === "tech" ? "Техническая" : "Бизнес"
+                }}</span>
                 <span class="chip">{{ dirLabel(task.direction) }}</span>
                 <span class="chip">{{ task.customerDepartment }}</span>
                 <span class="chip">{{ statusLabel(task.registryStatus) }}</span>
                 <span class="chip">{{ task.size }}</span>
-                <span class="chip">{{ processBandLabel(getProcessScore(task)) }}</span>
+                <span class="chip">{{
+                  processBandLabel(getProcessScore(task))
+                }}</span>
               </div>
-              <p class="queue-text">{{ task.description || "Описание не заполнено." }}</p>
+              <p class="queue-text">
+                {{ task.description || "Описание не заполнено." }}
+              </p>
             </div>
             <div v-if="!isReadOnly" class="row-actions">
-              <button class="btn btn-light" type="button" @click="startEdit(task)">
+              <button
+                class="btn btn-light"
+                type="button"
+                @click="startEdit(task)"
+              >
                 Редактировать
               </button>
-              <button class="btn btn-danger" type="button" @click="deleteTask(task.id)">
+              <button
+                class="btn btn-danger"
+                type="button"
+                @click="deleteTask(task.id)"
+              >
                 Удалить
               </button>
             </div>
@@ -586,7 +654,11 @@
         <article class="card">
           <div class="card-kicker">Сводка по текущему срезу</div>
           <div class="summary-actions">
-            <button class="btn btn-secondary" type="button" @click="copySummary">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              @click="copySummary"
+            >
               Скопировать сводку
             </button>
             <button
@@ -636,6 +708,8 @@ const customerDepartments = [
   "Развитие",
   "Закупки",
   "Юристы",
+  "Общее",
+  "Технический долг",
 ];
 
 const quadrantDefs = [
@@ -822,9 +896,11 @@ const statusOptionsForForm = computed(() => {
 
 const filteredTasks = computed(() =>
   tasks.value.filter((task) => {
-    const matchesType = typeFilter.value === "all" || task.type === typeFilter.value;
+    const matchesType =
+      typeFilter.value === "all" || task.type === typeFilter.value;
     const matchesDirection =
-      directionFilter.value === "all" || task.direction === directionFilter.value;
+      directionFilter.value === "all" ||
+      task.direction === directionFilter.value;
     const matchesDepartment =
       departmentFilter.value === "all" ||
       task.customerDepartment === departmentFilter.value;
@@ -837,7 +913,8 @@ const sortedTasks = computed(() => {
   if (sortBy.value === "status") {
     return list.sort((a, b) => {
       const byStatus =
-        (statusOrder[a.registryStatus] ?? 99) - (statusOrder[b.registryStatus] ?? 99);
+        (statusOrder[a.registryStatus] ?? 99) -
+        (statusOrder[b.registryStatus] ?? 99);
       if (byStatus !== 0) return byStatus;
       return compareByValueDesc(a, b);
     });
@@ -862,7 +939,10 @@ const sprintQuadrants = computed(() => {
   });
   Object.keys(map).forEach((key) => {
     map[key].sort((a, b) => {
-      const directionSort = dirLabel(a.direction).localeCompare(dirLabel(b.direction), "ru");
+      const directionSort = dirLabel(a.direction).localeCompare(
+        dirLabel(b.direction),
+        "ru",
+      );
       if (directionSort !== 0) return directionSort;
       return compareByValueDesc(a, b);
     });
@@ -876,10 +956,14 @@ const summaryText = computed(() => {
 
   return [
     "Спринт-старт:",
-    sprintLines.length ? sprintLines.join("\n") : "Нет задач в спринте по текущему срезу.",
+    sprintLines.length
+      ? sprintLines.join("\n")
+      : "Нет задач в спринте по текущему срезу.",
     "",
     "Очередь:",
-    queueLines.length ? queueLines.join("\n") : "Нет задач в очереди по текущему срезу.",
+    queueLines.length
+      ? queueLines.join("\n")
+      : "Нет задач в очереди по текущему срезу.",
   ].join("\n");
 });
 
@@ -904,7 +988,17 @@ watch(
 );
 
 watch(
-  () => [form.operationsPerDay, form.minutesPerOperation, form.peopleCount, form.workDaysPerMonth, form.hourlyRate, form.delayScore, form.impactScore, form.deadlineScore, form.size],
+  () => [
+    form.operationsPerDay,
+    form.minutesPerOperation,
+    form.peopleCount,
+    form.workDaysPerMonth,
+    form.hourlyRate,
+    form.delayScore,
+    form.impactScore,
+    form.deadlineScore,
+    form.size,
+  ],
   () => updatePreview(),
 );
 
@@ -1105,14 +1199,12 @@ function buildSprintSummaryLines() {
 
 function buildQueueSummaryLines() {
   const total = visibleQueueTasks.value.length;
-  return [...visibleQueueTasks.value]
-    .sort(compareQueueTasks)
-    .map((task) => {
-      const position = task.queuePosition || "позиция не выставлена";
-      return `${task.customerDepartment} — ${
-        typeof position === "number" ? `позиция ${position}` : position
-      } из ${total}`;
-    });
+  return [...visibleQueueTasks.value].sort(compareQueueTasks).map((task) => {
+    const position = task.queuePosition || "позиция не выставлена";
+    return `${task.customerDepartment} — ${
+      typeof position === "number" ? `позиция ${position}` : position
+    } из ${total}`;
+  });
 }
 
 function updatePreview() {
@@ -1255,7 +1347,9 @@ function submitTask() {
   touchMeta();
 
   if (editingTaskId.value) {
-    const index = tasks.value.findIndex((task) => task.id === editingTaskId.value);
+    const index = tasks.value.findIndex(
+      (task) => task.id === editingTaskId.value,
+    );
     if (index !== -1) {
       tasks.value[index] = {
         ...tasks.value[index],
@@ -1491,7 +1585,11 @@ onMounted(async () => {
 .page-shell {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(22, 163, 74, 0.12), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(22, 163, 74, 0.12),
+      transparent 28%
+    ),
     linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
   padding: 24px 16px 48px;
   color: #0f172a;
