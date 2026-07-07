@@ -28,6 +28,23 @@
         </button>
       </section>
 
+      <section class="card">
+        <div class="card-kicker">Скрамы</div>
+        <div class="project-tabs">
+          <button
+            v-for="project in projectTabs"
+            :key="project.key"
+            type="button"
+            class="project-tab"
+            :class="{ active: activeProjectKey === project.key }"
+            @click="setActiveProject(project.key)"
+          >
+            <strong>{{ project.label }}</strong>
+            <span>{{ project.subtitle }}</span>
+          </button>
+        </div>
+      </section>
+
       <section v-if="!isReadOnly" class="card">
         <div class="section-head">
           <div>
@@ -59,6 +76,22 @@
         <div class="group-block">
           <h3 class="group-title">Основная информация</h3>
           <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Скрам</span>
+              <select
+                v-model="form.projectKey"
+                class="field-input"
+                @change="syncDirectionForProject"
+              >
+                <option
+                  v-for="project in projectTabs"
+                  :key="project.key"
+                  :value="project.key"
+                >
+                  {{ project.label }}
+                </option>
+              </select>
+            </label>
             <label class="field">
               <span class="field-label">Куда добавить задачу</span>
               <select
@@ -124,8 +157,7 @@
             <label class="field">
               <span class="field-label">Направление</span>
               <select v-model="form.direction" class="field-input">
-                <option value="web">Web</option>
-                <option value="onec">1С</option>
+                <option :value="form.projectKey">{{ projectLabel(form.projectKey) }}</option>
                 <option value="common">Общее</option>
               </select>
             </label>
@@ -436,8 +468,7 @@
             <span class="field-label">Направление</span>
             <select v-model="directionFilter" class="field-input">
               <option value="all">Все направления</option>
-              <option value="web">Web</option>
-              <option value="onec">1С</option>
+              <option :value="activeProjectKey">{{ activeProjectLabel }}</option>
               <option value="common">Общее</option>
             </select>
           </label>
@@ -461,6 +492,14 @@
               <option value="status">По статусу</option>
             </select>
           </label>
+          <label class="field">
+            <span class="field-label">Сортировка очереди</span>
+            <select v-model="queueSortBy" class="field-input">
+              <option value="queue">По позиции в очереди</option>
+              <option value="bitrix">По номеру B24</option>
+              <option value="priority">По ценности</option>
+            </select>
+          </label>
         </div>
       </section>
 
@@ -468,7 +507,9 @@
         <div class="section-head">
           <div>
             <div class="card-kicker">Спринт</div>
-            <h2 class="section-title">Квадранты текущего спринта</h2>
+            <h2 class="section-title">
+              Квадранты текущего спринта · {{ activeProjectLabel }}
+            </h2>
             <p class="section-caption">
               Здесь показываются только задачи со статусами «В спринте» и «В
               работе».
@@ -523,36 +564,91 @@
       <section class="card">
         <div class="section-head">
           <div>
+            <div class="card-kicker">Все задачи</div>
+            <h2 class="section-title">Полный список · {{ activeProjectLabel }}</h2>
+          </div>
+          <button
+            class="btn btn-light"
+            type="button"
+            @click="fullListCollapsed = !fullListCollapsed"
+          >
+            {{ fullListCollapsed ? "Показать список" : "Свернуть список" }}
+          </button>
+        </div>
+        <div v-if="!fullListCollapsed && sortedTasks.length" class="list-stack">
+          <article v-for="task in sortedTasks" :key="task.id" class="list-card">
+            <div class="list-main">
+              <div class="list-title-row">
+                <strong>{{ taskLabel(task) }}</strong>
+                <span class="value-chip">{{ calcValue(task) }}/21</span>
+              </div>
+              <div class="chip-row">
+                <span class="chip">{{
+                  task.type === "tech" ? "Техническая" : "Бизнес"
+                }}</span>
+                <span class="chip">{{ projectLabel(task.projectKey) }}</span>
+                <span class="chip">{{ dirLabel(task.direction) }}</span>
+                <span class="chip">{{ task.customerDepartment }}</span>
+                <span class="chip">{{ statusLabel(task.registryStatus) }}</span>
+                <span class="chip">{{ task.size }}</span>
+                <span class="chip">{{
+                  processBandLabel(getProcessScore(task))
+                }}</span>
+              </div>
+              <p class="queue-text">
+                {{ task.description || "Описание не заполнено." }}
+              </p>
+            </div>
+            <div v-if="!isReadOnly" class="row-actions">
+              <button
+                class="btn btn-light"
+                type="button"
+                @click="startEdit(task)"
+              >
+                Редактировать
+              </button>
+              <button
+                class="btn btn-danger"
+                type="button"
+                @click="deleteTask(task.id)"
+              >
+                Удалить
+              </button>
+            </div>
+          </article>
+        </div>
+        <p v-else-if="!fullListCollapsed" class="empty-state">
+          По текущим фильтрам задач не найдено.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
             <div class="card-kicker">Очередь</div>
-            <h2 class="section-title">Общий бэклог</h2>
+            <h2 class="section-title">Общий бэклог · {{ activeProjectLabel }}</h2>
             <p class="section-caption">
               Плоский список задач вне спринта, отсортированный по позиции в
               очереди.
             </p>
           </div>
+          <button
+            class="btn btn-light"
+            type="button"
+            @click="backlogCollapsed = !backlogCollapsed"
+          >
+            {{ backlogCollapsed ? "Показать бэклог" : "Свернуть бэклог" }}
+          </button>
         </div>
 
-        <div v-if="visibleQueueTasks.length" class="queue-list">
+        <div v-if="!backlogCollapsed && visibleQueueTasks.length" class="queue-list">
           <article
             v-for="task in visibleQueueTasks"
             :key="task.id"
             class="queue-item"
           >
             <div class="queue-main">
-              <div class="queue-position">
-                <template v-if="!isReadOnly">
-                  <input
-                    class="queue-position-input"
-                    :value="task.queuePosition ?? ''"
-                    type="number"
-                    min="1"
-                    @change="updateQueuePosition(task.id, $event.target.value)"
-                  />
-                </template>
-                <template v-else>
-                  {{ task.queuePosition || "—" }}
-                </template>
-              </div>
+              <div class="queue-position">{{ task.queuePosition || "—" }}</div>
               <div class="queue-body">
                 <div class="queue-title-row">
                   <strong>{{ taskLabel(task) }}</strong>
@@ -562,6 +658,7 @@
                   <span class="chip">{{
                     task.type === "tech" ? "Техническая" : "Бизнес"
                   }}</span>
+                  <span class="chip">{{ projectLabel(task.projectKey) }}</span>
                   <span class="chip">{{ dirLabel(task.direction) }}</span>
                   <span class="chip">{{ task.customerDepartment }}</span>
                   <span class="chip">{{
@@ -594,60 +691,9 @@
             </div>
           </article>
         </div>
-        <p v-else class="empty-state">
+        <p v-else-if="!backlogCollapsed" class="empty-state">
           В очереди нет задач для текущих фильтров.
         </p>
-      </section>
-
-      <section class="card">
-        <div class="section-head">
-          <div>
-            <div class="card-kicker">Все задачи</div>
-            <h2 class="section-title">Полный список</h2>
-          </div>
-        </div>
-        <div v-if="sortedTasks.length" class="list-stack">
-          <article v-for="task in sortedTasks" :key="task.id" class="list-card">
-            <div class="list-main">
-              <div class="list-title-row">
-                <strong>{{ taskLabel(task) }}</strong>
-                <span class="value-chip">{{ calcValue(task) }}/21</span>
-              </div>
-              <div class="chip-row">
-                <span class="chip">{{
-                  task.type === "tech" ? "Техническая" : "Бизнес"
-                }}</span>
-                <span class="chip">{{ dirLabel(task.direction) }}</span>
-                <span class="chip">{{ task.customerDepartment }}</span>
-                <span class="chip">{{ statusLabel(task.registryStatus) }}</span>
-                <span class="chip">{{ task.size }}</span>
-                <span class="chip">{{
-                  processBandLabel(getProcessScore(task))
-                }}</span>
-              </div>
-              <p class="queue-text">
-                {{ task.description || "Описание не заполнено." }}
-              </p>
-            </div>
-            <div v-if="!isReadOnly" class="row-actions">
-              <button
-                class="btn btn-light"
-                type="button"
-                @click="startEdit(task)"
-              >
-                Редактировать
-              </button>
-              <button
-                class="btn btn-danger"
-                type="button"
-                @click="deleteTask(task.id)"
-              >
-                Удалить
-              </button>
-            </div>
-          </article>
-        </div>
-        <p v-else class="empty-state">По текущим фильтрам задач не найдено.</p>
       </section>
 
       <section class="meta-grid meta-grid-single">
@@ -829,13 +875,21 @@ const taskTemplates = [
 const importInput = ref(null);
 const isReadOnly = ref(true);
 const quadrantCollapsed = ref(false);
+const fullListCollapsed = ref(false);
+const backlogCollapsed = ref(false);
 const editingTaskId = ref(null);
 const activeTemplateKey = ref("");
 const tasks = ref([]);
+const projectTabs = [
+  { key: "web", label: "Web", subtitle: "Скрам и очередь Web" },
+  { key: "onec", label: "1С", subtitle: "Скрам и очередь 1С" },
+];
+const activeProjectKey = ref("web");
 const typeFilter = ref("business");
 const directionFilter = ref("all");
 const departmentFilter = ref("all");
 const sortBy = ref("priority");
+const queueSortBy = ref("queue");
 
 const registryMeta = reactive({
   registryName: "Zezeba Task Registry",
@@ -845,6 +899,7 @@ const registryMeta = reactive({
 
 function defaultForm() {
   return {
+    projectKey: activeProjectKey.value,
     placement: "queue",
     type: "business",
     taskNumber: "",
@@ -878,6 +933,7 @@ function defaultForm() {
 const form = reactive(defaultForm());
 
 const previewMetrics = computed(() => getTaskMetrics(form));
+const activeProjectLabel = computed(() => projectLabel(activeProjectKey.value));
 
 const statusOptionsForForm = computed(() => {
   if (form.placement === "sprint") {
@@ -896,6 +952,8 @@ const statusOptionsForForm = computed(() => {
 
 const filteredTasks = computed(() =>
   tasks.value.filter((task) => {
+    const matchesProject =
+      normalizeProjectKey(task.projectKey || task.direction) === activeProjectKey.value;
     const matchesType =
       typeFilter.value === "all" || task.type === typeFilter.value;
     const matchesDirection =
@@ -904,7 +962,7 @@ const filteredTasks = computed(() =>
     const matchesDepartment =
       departmentFilter.value === "all" ||
       task.customerDepartment === departmentFilter.value;
-    return matchesType && matchesDirection && matchesDepartment;
+    return matchesProject && matchesType && matchesDirection && matchesDepartment;
   }),
 );
 
@@ -1104,6 +1162,14 @@ function statusLabel(status) {
   );
 }
 
+function normalizeProjectKey(value) {
+  return value === "onec" ? "onec" : "web";
+}
+
+function projectLabel(projectKey) {
+  return normalizeProjectKey(projectKey) === "onec" ? "1С" : "Web";
+}
+
 function dirLabel(direction) {
   return (
     {
@@ -1141,9 +1207,24 @@ function compareByValueDesc(a, b) {
 }
 
 function compareQueueTasks(a, b) {
+  if (queueSortBy.value === "bitrix") {
+    return compareByBitrixNumberAsc(a, b);
+  }
+
+  if (queueSortBy.value === "priority") {
+    return compareByValueDesc(a, b);
+  }
+
   const aPos = a.queuePosition ?? Number.MAX_SAFE_INTEGER;
   const bPos = b.queuePosition ?? Number.MAX_SAFE_INTEGER;
   if (aPos !== bPos) return aPos - bPos;
+  return compareByValueDesc(a, b);
+}
+
+function compareByBitrixNumberAsc(a, b) {
+  const aNumber = Number(a.taskNumber || 0);
+  const bNumber = Number(b.taskNumber || 0);
+  if (aNumber !== bNumber) return aNumber - bNumber;
   return compareByValueDesc(a, b);
 }
 
@@ -1157,6 +1238,28 @@ function isSprintStatus(status) {
 
 function isBacklogStatus(status) {
   return status !== "done" && !isSprintStatus(status);
+}
+
+function setActiveProject(projectKey) {
+  activeProjectKey.value = normalizeProjectKey(projectKey);
+  resetProjectScopedControls();
+  if (!editingTaskId.value) {
+    form.projectKey = activeProjectKey.value;
+    syncDirectionForProject();
+    syncQueuePositionForStatus();
+  }
+}
+
+function resetProjectScopedControls() {
+  directionFilter.value = "all";
+  departmentFilter.value = "all";
+}
+
+function syncDirectionForProject() {
+  form.projectKey = normalizeProjectKey(form.projectKey);
+  if (form.direction !== "common") {
+    form.direction = form.projectKey;
+  }
 }
 
 function quadrantStyle(quadrant) {
@@ -1217,7 +1320,7 @@ function syncQueuePositionForStatus() {
     return;
   }
   if (!form.queuePosition) {
-    form.queuePosition = String(getNextQueuePosition());
+    form.queuePosition = String(getNextQueuePosition(form.projectKey));
   }
 }
 
@@ -1234,7 +1337,7 @@ function syncStatusForPlacement() {
     form.registryStatus = "new";
   }
   if (!form.queuePosition) {
-    form.queuePosition = String(getNextQueuePosition());
+    form.queuePosition = String(getNextQueuePosition(form.projectKey));
   }
 }
 
@@ -1248,6 +1351,7 @@ function applyTemplate(templateKey) {
   if (!preset) return;
 
   const preserve = {
+    projectKey: form.projectKey,
     title: form.title,
     description: form.description,
     taskNumber: form.taskNumber,
@@ -1260,6 +1364,7 @@ function applyTemplate(templateKey) {
 
   Object.assign(form, defaultForm(), preset.values, preserve);
   activeTemplateKey.value = templateKey;
+  syncDirectionForProject();
   form.placement = isSprintStatus(form.registryStatus) ? "sprint" : "queue";
   syncQueuePositionForStatus();
   updatePreview();
@@ -1269,8 +1374,11 @@ function touchMeta() {
   registryMeta.updatedAt = new Date().toISOString();
 }
 
-function getNextQueuePosition() {
+function getNextQueuePosition(projectKey) {
   const positions = tasks.value
+    .filter(
+      (task) => normalizeProjectKey(task.projectKey || task.direction) === normalizeProjectKey(projectKey),
+    )
     .map((task) => Number(task.queuePosition || 0))
     .filter((value) => value > 0);
   return positions.length ? Math.max(...positions) + 1 : 1;
@@ -1278,6 +1386,7 @@ function getNextQueuePosition() {
 
 function formToTask() {
   const base = {
+    projectKey: normalizeProjectKey(form.projectKey),
     type: form.type,
     taskNumber: String(form.taskNumber || "").trim(),
     title: form.title.trim(),
@@ -1375,13 +1484,14 @@ function startEdit(task) {
   editingTaskId.value = task.id;
   activeTemplateKey.value = "";
   Object.assign(form, {
+    projectKey: normalizeProjectKey(task.projectKey || task.direction),
     placement: isSprintStatus(task.registryStatus) ? "sprint" : "queue",
     type: task.type || "business",
     taskNumber: task.taskNumber || "",
     title: task.title || "",
     description: task.description || "",
     customerDepartment: task.customerDepartment || customerDepartments[0],
-    direction: task.direction || "web",
+    direction: task.direction || normalizeProjectKey(task.projectKey || task.direction),
     registryStatus: task.registryStatus || "candidate",
     queuePosition: task.queuePosition ? String(task.queuePosition) : "",
     size: task.size || "M",
@@ -1434,6 +1544,7 @@ function cancelEdit() {
 function resetForm() {
   Object.assign(form, defaultForm());
   syncStatusForPlacement();
+  syncDirectionForProject();
   activeTemplateKey.value = "";
   updatePreview();
 }
@@ -1496,6 +1607,7 @@ function normalizeImportedTask(task) {
   const normalized = {
     placement: isSprintStatus(task.registryStatus) ? "sprint" : "queue",
     ...task,
+    projectKey: normalizeProjectKey(task.projectKey || task.direction),
     customerDepartment: task.customerDepartment || customerDepartments[0],
     direction: task.direction === "qa" ? "common" : task.direction || "web",
     queuePosition:
@@ -1837,6 +1949,40 @@ onMounted(async () => {
   gap: 12px;
 }
 
+.project-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.project-tab {
+  border: 1px solid #dbeafe;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.project-tab strong {
+  font-size: 16px;
+}
+
+.project-tab span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.project-tab.active {
+  background: #ecfdf5;
+  border-color: #22c55e;
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.15);
+}
+
 .template-card {
   border: 1px solid #dbeafe;
   background: #f8fbff;
@@ -1994,21 +2140,6 @@ onMounted(async () => {
   font-weight: 700;
 }
 
-.queue-position-input {
-  width: 56px;
-  height: 56px;
-  border: none;
-  background: transparent;
-  color: #fff;
-  text-align: center;
-  font: inherit;
-  font-weight: 700;
-}
-
-.queue-position-input:focus {
-  outline: none;
-}
-
 .queue-body {
   flex: 1;
 }
@@ -2063,6 +2194,7 @@ onMounted(async () => {
 @media (max-width: 1080px) {
   .meta-grid,
   .quadrant-grid,
+  .project-tabs,
   .template-grid,
   .preview-panel,
   .fact-grid {
@@ -2084,6 +2216,7 @@ onMounted(async () => {
   .filter-grid,
   .meta-grid,
   .quadrant-grid,
+  .project-tabs,
   .template-grid,
   .preview-panel,
   .fact-grid {
